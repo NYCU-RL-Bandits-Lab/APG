@@ -1,0 +1,19 @@
+state_num: 1
+action_num: 3
+initial_state_distribution_dict:
+  s1: 1
+initial_theta_dict:
+  s1:
+  - 0.0
+  - 0.0
+  - 0.0
+reward_dict:
+  s1_a1: 1.0
+  s1_a2: 0.99
+  s1_a3: 0.0
+transition_prob_dict:
+  s1a1_s1: 1
+  s1a2_s1: 1
+  s1a3_s1: 1
+gamma: 0.0
+eta: 0.4
