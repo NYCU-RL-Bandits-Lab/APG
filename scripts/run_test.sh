@@ -3,8 +3,8 @@
  # @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  # @Date: 2023-06-15 10:38:24
  # @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- # @LastEditTime: 2023-06-15 21:57:51
- # @FilePath: /mru/APG/scripts/run_bandit_non_monotone.sh
+ # @LastEditTime: 2023-06-16 11:40:26
+ # @FilePath: /mru/APG/scripts/run_test.sh
  # @Description: 
  # 
 ### 
@@ -26,16 +26,13 @@ fi
 # activate env
 source ./myenv/bin/activate
 # param
-env="bandit_non_monotone"
+env="test"
 # run
 python3 main.py --log_root ./logs \
                 --fname $env \
-                --gamma 0.0 \
-                --APG_epoch_size 500 \
-                --PG_epoch_size 500 \
+                --gamma 0.9 \
+                --APG_epoch_size 1000000 \
+                --APG_graphing_size 1000000 \
+                --PG_epoch_size 1000000 \
+                --PG_graphing_size 1000000 \
                 --env ./mdp_env/$env.yaml
-# graph
-python3 graph.py --log_dir ./logs/$env \
-                --algo APG \
-                --plot_OneStep \
-                --graphing_size 500

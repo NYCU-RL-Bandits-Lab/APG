@@ -28,7 +28,7 @@ class Plotter:
         # plotting color list
         self.color_list = [ 'lightseagreen', 'purple', \
                             'deepskyblue', 'olivedrab', 'lightcoral', 'mediumorchid', \
-                            'yellow', 'pink', "darkgreen", 'seagreen', ]
+                            'yellow', 'pink', "darkgreen", 'orange', ]
 
         # (s,a) number
         self.state_num = args.state_num
@@ -164,6 +164,7 @@ class Plotter:
 
         # configuration 
         self.configure(axis)
+        plt.xticks([i * (size//5) for i in range(6)])
 
         # save plot
         plt.tight_layout()  
@@ -229,7 +230,8 @@ class Plotter:
         self.plot_mom_grad(axis, size)
 
         # configuration 
-        self.configure(axis)
+        self.configure(axis, loc="upper left", red_text=True)
+        plt.yticks([1e-1, 1e-3, 1e-5, 1e-7, 1e-9, 1e-11, 1e-13, 1e-15])
 
         # save plot
         plt.tight_layout()  
@@ -263,10 +265,12 @@ class Plotter:
             self.df_v_rho = self.compute_V_rho()
 
             # Suboptimality gap (log log graph)
-            self.plot_log_log(axis, size)
+            self.plot_log_log(axis, size, clip_num=21)
 
         # configuration 
-        self.configure(axis)
+        self.configure(axis, sci=False)
+        plt.xticks([0, 5, 10, 15, 20])
+        plt.yticks([0, 5, 10, 15, 20])
 
         # save plot
         plt.tight_layout()  
@@ -373,7 +377,7 @@ class Plotter:
         self.logger(f"Plotting V(ρ)", title=False)
         axis.plot(self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy(), \
                     label=f"V(ρ) = {round(self.df_v_rho.iloc[size-1]['V_theta(rho)'], 2)}",\
-                    color = "orange", \
+                    color = "seagreen", \
                     linewidth=self.linewidth)
 
         axis.set_title("Value Function", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -389,7 +393,7 @@ class Plotter:
         # plot
         axis.plot(-np.log(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy()), \
                     label="V(ρ)", \
-                    color="orange", \
+                    color="red" if self.algo=="APG" else "blue", \
                     linewidth=self.linewidth)
         
         axis.set_title("-Log Loss", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -397,21 +401,24 @@ class Plotter:
         axis.set_ylabel("-log(V* - V(ρ))", fontsize=self.fontsize, fontname='monospace', labelpad=7)
     
 
-    def plot_log_log(self, axis, size):
+    def plot_log_log(self, axis, size, clip_num=None):
         
         # log
         self.logger(f"Plotting -log(V*(ρ) - V(ρ))", title=False)
         
         # plot
+        log_loss = -np.log(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy())
+        if clip_num:
+            log_loss[log_loss >= clip_num] = np.nan
         axis.plot(np.log(range(1, size+1)), \
-                    -np.log(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy()), \
+                    log_loss, \
                     label=self.algo, \
                     color="red" if self.algo=="APG" else "blue", \
                     linewidth=self.linewidth)
         
         axis.set_title("Log-Log Graph", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
         axis.set_xlabel("log(Time Steps)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
-        axis.set_ylabel("-log(V*(ρ) - V(ρ))", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+        axis.set_ylabel("-log(V* - V(ρ))", fontsize=self.fontsize, fontname='monospace', labelpad=7)
     
 
     def plot_subopt(self, axis, size):
@@ -436,7 +443,7 @@ class Plotter:
         # plot
         axis.semilogy(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy(), \
                     label=self.algo, \
-                    color="orange", \
+                    color="red" if self.algo=="APG" else "blue", \
                     linewidth=self.linewidth)
         axis.semilogy(range(1, size+1),
                     [pre_constant / (t * t) for t in range(1, size+1)], \
@@ -453,7 +460,7 @@ class Plotter:
         
         axis.set_title("Sub-Optimality Gap", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
         axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
-        axis.set_ylabel("V*(ρ) - V(ρ)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+        axis.set_ylabel("V* - V(ρ)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
     
 
     def plot_mom_grad(self, axis, size):
@@ -462,18 +469,18 @@ class Plotter:
         if self.algo == "PG":
             axis.semilogy(self.df_v_rho.iloc[1:size]["V_theta(rho)"].to_numpy() - self.df_v_rho.iloc[:size-1]["V_theta(rho)"].to_numpy(), \
                         label="Gradient", \
-                        color="orange", \
+                        color="seagreen", \
                         linestyle=":", \
                         linewidth=self.linewidth)
         else:
             axis.semilogy(self.df_v_rho.iloc[1:size]["V_theta(rho)"].to_numpy() - self.df_v_rho.iloc[:size-1]["V_omega(rho)"].to_numpy(), \
                         label="Gradient", \
-                        color="orange", \
+                        color="seagreen", \
                         linestyle=":", \
                         linewidth=self.linewidth)
             axis.semilogy(self.df_v_rho.iloc[2:size]["V_omega(rho)"].to_numpy() - self.df_v_rho.iloc[2:size]["V_theta(rho)"].to_numpy(), \
                         label="Momentum", \
-                        color="orange", \
+                        color="seagreen", \
                         linewidth=self.linewidth)
         
         axis.set_title(f"Mom-Grad Improvement", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -527,22 +534,20 @@ class Plotter:
         return df_v_rho
 
 
-    def configure(self, axis):
+    def configure(self, axis, sci=True, loc='best', red_text=False):
         
         # grid
         axis.grid()
 
         # legend
-        axis.legend(loc='best', frameon=True)
-        legend = axis.legend(loc='best', frameon=True, prop={"size":self.legendsize})
+        axis.legend(loc=loc, frameon=True)
+        legend = axis.legend(loc=loc, frameon=True, prop={"size":self.legendsize})
         legend.get_frame().set_linewidth(self.linewidth)
         legend.get_frame().set_edgecolor('black')
 
         # label
         plt.setp(axis.get_xticklabels(), fontsize=self.ticksize)
         plt.setp(axis.get_yticklabels(), fontsize=self.ticksize)
-        # plt.yticks([0, 5, 10, 15, 20])
-        # plt.xticks([0, 5, 10, 15, 20])
         
         # tick width
         axis.tick_params(width=2)
@@ -552,10 +557,12 @@ class Plotter:
             axis.spines[ax].set_linewidth(2)
 
         # set x axis to scientific notation
-        plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
+        if sci:
+            plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
 
         # offset text
         offset_text = axis.xaxis.get_offset_text()
         offset_text.set_size(self.offtextsize)
-        # offset_text.set_color('red')
+        if red_text:
+            offset_text.set_color('red')
         

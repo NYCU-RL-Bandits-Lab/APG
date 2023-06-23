@@ -3,8 +3,8 @@
  # @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  # @Date: 2023-06-15 10:38:24
  # @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- # @LastEditTime: 2023-06-15 13:17:43
- # @FilePath: /mru/tmpppp/scripts/run_bandit_uniform.sh
+ # @LastEditTime: 2023-06-15 21:57:46
+ # @FilePath: /mru/APG/scripts/run_bandit_uniform.sh
  # @Description: 
  # 
 ### 
@@ -24,7 +24,7 @@ else
     fi
 fi
 # activate env
-# source ./myenv/bin/activate
+source ./myenv/bin/activate
 # param
 env="bandit_uniform"
 # run

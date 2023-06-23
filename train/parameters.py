@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-05-11 15:32:32
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-06-15 13:42:26
+LastEditTime: 2023-06-21 13:30:09
 FilePath: /mru/APG/train/parameters.py
 Description: 
 
@@ -26,7 +26,7 @@ def parse_args():
     parser.add_argument('--PG_epoch_size', default=1000, type=int, help='PG epoch_size')
     
     # MDP env
-    parser.add_argument('--env', type=str, default="./mdp_env/bandit_uniform.yaml")
+    parser.add_argument('--env', type=str, default="./mdp_env/test.yaml")
     parser.add_argument('--state_action_num', default=[None, None], type=int, nargs='+', help='params for random generate environment')
     parser.add_argument('--random_mdp', default=False, action='store_true')
 

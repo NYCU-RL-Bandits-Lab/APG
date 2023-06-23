@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-15 13:56:34
+ * @LastEditTime: 2023-06-21 13:24:15
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -49,7 +49,7 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
     ```
     or
     ```sh
-    pip3 install pyyaml termcolor pandas numpy matplotlib tqdm fastparquet
+    pip3 install pyyaml termcolor pandas numpy matplotlib tqdm fastparquet mpmath
     ```
     
 <br/><br/>

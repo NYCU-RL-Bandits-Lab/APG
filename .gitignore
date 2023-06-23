@@ -164,3 +164,6 @@ myenv/*
 
 # log file
 **/mean.parquet
+
+# testing .py
+test.py
