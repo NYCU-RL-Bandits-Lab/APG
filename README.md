@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-24 12:48:09
+ * @LastEditTime: 2023-06-24 12:52:50
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -10,7 +10,7 @@
 # Accelerated Policy Gradient (APG)
 **Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning**
 
-Yen-Ju Chen, Nai-Chieh Huang [Ping-Chun Hsieh](https://pinghsieh.github.io/)
+Yen-Ju Chen, Nai-Chieh Huang, [Ping-Chun Hsieh](https://pinghsieh.github.io/)
 
 *ICML 2023 Workshop on New Frontiers in Learning, Control, and Dynamical Systems*
 
@@ -20,6 +20,8 @@ Yen-Ju Chen, Nai-Chieh Huang [Ping-Chun Hsieh](https://pinghsieh.github.io/)
 ## Folder Structure
 ```
 .
+├── assests/
+│   └── TBD
 ├── helper/
 │   ├── plot.py
 │   └── utils.py
@@ -88,20 +90,21 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
                      --plot_OneStep
     ```
     <center class="half">
-        <kbd><img src=./logs/test/APG/APG_value_1000.png width='200'></kbd>
-        <kbd><img src=./logs/test/log_log_1000.png width='200'></kbd>
-        <kbd><img src=./logs/test/APG/APG_mom_grad_1000.png width='200'></kbd>
-        <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='200'></kbd>
+        <kbd><img src=./logs/test/APG/APG_value_1000.png width='150'></kbd>
+        <kbd><img src=./logs/test/log_log_1000.png width='150'></kbd>
+        <kbd><img src=./logs/test/APG/APG_mom_grad_1000.png width='150'></kbd>
+        <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='150'></kbd>
     </center>
 
 ## Random MDP:
-- Easily run the following code to perform APG & PG on a `random MDP` \
-(The information of the random MDP will be recorded at [here](./logs/test_random_mdp_5s5a/args.yaml)):
+- Easily run the following code to perform APG & PG on a `random MDP`:
+
     ```py
     python3 main.py --random_mdp \
                     --state_action_num 5 5 \
                     --fname test_random_mdp_5s5a 
     ```
+    Note: The information of the random MDP will be recorded at [here](./logs/test_random_mdp_5s5a/args.yaml)
 
 <!-- <center class="half">
     <kbd><img src= width='650'></kbd>
