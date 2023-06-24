@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-24 12:52:50
+ * @LastEditTime: 2023-06-24 12:53:57
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -57,7 +57,7 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
     ```
     or
     ```sh
-    pip3 install pyyaml termcolor pandas numpy matplotlib tqdm fastparquet mpmath
+    pip3 install pyyaml termcolor pandas numpy matplotlib tqdm fastparquet
     ```
 
 <br/><br/>
@@ -90,10 +90,10 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
                      --plot_OneStep
     ```
     <center class="half">
-        <kbd><img src=./logs/test/APG/APG_value_1000.png width='150'></kbd>
-        <kbd><img src=./logs/test/log_log_1000.png width='150'></kbd>
-        <kbd><img src=./logs/test/APG/APG_mom_grad_1000.png width='150'></kbd>
-        <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='150'></kbd>
+        <kbd><img src=./logs/test/APG/APG_value_1000.png width='175'></kbd>
+        <kbd><img src=./logs/test/log_log_1000.png width='175'></kbd>
+        <kbd><img src=./logs/test/APG/APG_mom_grad_1000.png width='175'></kbd>
+        <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='175'></kbd>
     </center>
 
 ## Random MDP:
