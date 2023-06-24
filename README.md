@@ -2,16 +2,22 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-21 13:24:15
+ * @LastEditTime: 2023-06-24 12:48:09
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
 -->
-# APG
-**Target: Could Nesterov’s accelerated gradient reach the convergence rate of $O(1/t^2)$ ?**
+# Accelerated Policy Gradient (APG)
+**Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning**
+
+Yen-Ju Chen, Nai-Chieh Huang [Ping-Chun Hsieh](https://pinghsieh.github.io/)
+
+*ICML 2023 Workshop on New Frontiers in Learning, Control, and Dynamical Systems*
+
+[\[Paper\]](TBD), [\[Poster\]](TBD)
 
 <br/><br/>
-## Folder structure
+## Folder Structure
 ```
 .
 ├── helper/
@@ -51,10 +57,61 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
     ```sh
     pip3 install pyyaml termcolor pandas numpy matplotlib tqdm fastparquet mpmath
     ```
-    
+
 <br/><br/>
-## Run code
-- change mode before running `.sh`:
+## Quick Start
+- Easily run the following code to perform APG & PG on a [testing MDP env](./mdp_env/test.yaml):
+    ```py
+    python3 main.py --fname test
+    ```
+    Note: Specify other arguments [here](./train/parameters.py).
+
+- After running `main.py`, one can find the suumary plot in `./logs/test/APG/APG_summary_1000.png`:
+    <center class="half">
+        <kbd><img src=./logs/test/APG/APG_summary_1000.png></kbd>
+    </center>
+    
+    and `./logs/test/PG/PG_summary_1000.png`:
+    <center class="half">
+        <kbd><img src=./logs/test/PG/PG_summary_1000.png></kbd>
+    </center>
+
+- Run `graph.py` to get more plot:
+    ```py
+    python3 graph.py --log_dir ./logs/test \
+                     --algo APG \
+                     --graphing_size 500 1000 \
+                     --plot_Summary \
+                     --plot_Value \
+                     --plot_LogLog \
+                     --plot_MomGrad \
+                     --plot_OneStep
+    ```
+    <center class="half">
+        <kbd><img src=./logs/test/APG/APG_value_1000.png width='200'></kbd>
+        <kbd><img src=./logs/test/log_log_1000.png width='200'></kbd>
+        <kbd><img src=./logs/test/APG/APG_mom_grad_1000.png width='200'></kbd>
+        <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='200'></kbd>
+    </center>
+
+## Random MDP:
+- Easily run the following code to perform APG & PG on a `random MDP` \
+(The information of the random MDP will be recorded at [here](./logs/test_random_mdp_5s5a/args.yaml)):
+    ```py
+    python3 main.py --random_mdp \
+                    --state_action_num 5 5 \
+                    --fname test_random_mdp_5s5a 
+    ```
+
+<!-- <center class="half">
+    <kbd><img src= width='650'></kbd>
+</center> -->
+    
+
+<br/><br/>
+## Reproducing Results
+Run the following code to reproduce the numerical results presented in the paper:
+- Change mode before running `.sh`:
     ```sh
     chmod +x ./scripts/{file name}.sh
     ```
@@ -66,38 +123,9 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
     ./scripts/run_bandit_uniform.sh
     ```
 
-<!-- - If you want to plot more graph...
-    ```sh
-    cd ./run_sh
-    ./plot.sh
-    ```
-    Note: make sure to modified the file path in `plot.sh` first. -->
+## Citation
+If you find our repository helpful to your research, please cite our paper:
 
-<br/><br/>
-<!-- ## e.g.
-- After executing `run_{environments name}.sh`, one can find the plot below in: `./simple_MDP/{env name}/{date}/{algorithm}_plot/{algorithm}_train_stats_{epoch}.png`</br><br/>
-- see example in `./simple_MDP/bandit_uniform_3a/PG_APG_20230228-111539/APG_plot/`
-
-<center class="half">
-    <kbd><img src=./simple_MDP/bandit_uniform_3a/PG_APG_20230228-111539/APG_plot/APG_train_stats_1000.png width='650'></kbd>
-</center></br><br/>
-
-- If more specific plot is needed, one can run `plot.sh` after modifying the file path in `plot.sh`
-- see example in `./simple_MDP/bandit_uniform_3a/PG_APG_20230228-111539/APG_plot/`
-- see example in `./simple_MDP/hard_init_2s_3a/PG_APG_20230218-014234/APG_plot/`
-
-<center class="half">
-    <kbd><img src=./simple_MDP/bandit_uniform_3a/PG_APG_20230228-111539/APG_plot/APG_grad_vs_norm_5000.png width='650'></kbd>
-</center></br><br/>
-
-<center class="half">
-    <kbd><img src=./simple_MDP/hard_init_2s_3a/PG_APG_20230218-014234/APG_plot/APG_delta_theta_10000.png width='650'></kbd>
-</center></br><br/>
-
-<center class="half">
-    <kbd><img src=./simple_MDP/hard_init_2s_3a/PG_APG_20230218-014234/APG_plot/APG_pi_10000.png width='650'></kbd>
-</center></br><br/>
-
-<center class="half">
-    <kbd><img src=./simple_MDP/hard_init_2s_3a/PG_APG_20230218-014234/APG_plot/APG_pi_10000.png width='650'></kbd>
-</center></br><br/> -->
+```
+TBD
+```

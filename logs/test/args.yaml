@@ -1,9 +1,9 @@
-APG_epoch_size: 1000000
+APG_epoch_size: 1000
 APG_graphing_size:
-- 1000000
-PG_epoch_size: 1000000
+- 1000
+PG_epoch_size: 1000
 PG_graphing_size:
-- 1000000
+- 1000
 V_opt: 9.999999999999996
 V_opts:
 - 9.999999999999996
