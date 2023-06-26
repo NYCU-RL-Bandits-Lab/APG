@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-26 22:04:14
+ * @LastEditTime: 2023-06-26 22:36:13
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -96,6 +96,7 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
         <kbd><img src=./logs/test/APG/APG_one_step_1000.png width='175'></kbd>
     </center>
 
+<br/><br/>
 ## Random MDP:
 - Easily run the following code to perform APG & PG on a `random MDP`:
 
@@ -128,6 +129,7 @@ Run the following code to reproduce the numerical results presented in the paper
     ./scripts/run_mdp_5s5a_uniform.sh
     ```
 
+<br/><br/>
 ## Citation
 If you find our repository helpful to your research, please cite our paper:
 
