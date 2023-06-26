@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-24 12:56:43
+ * @LastEditTime: 2023-06-26 22:04:14
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -124,6 +124,8 @@ Run the following code to reproduce the numerical results presented in the paper
     ./scripts/run_bandit_hard.sh
     ./scripts/run_bandit_non_monotone.sh
     ./scripts/run_bandit_uniform.sh
+    ./scripts/run_mdp_5s5a_hard.sh
+    ./scripts/run_mdp_5s5a_uniform.sh
     ```
 
 ## Citation
