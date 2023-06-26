@@ -167,3 +167,7 @@ myenv/*
 
 # testing .py
 test.py
+**/testing/**
+**/APG_mg.png
+**/APG_pi.png
+**/APG_theta.png

@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-24 12:53:57
+ * @LastEditTime: 2023-06-24 12:56:43
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -104,7 +104,7 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
                     --state_action_num 5 5 \
                     --fname test_random_mdp_5s5a 
     ```
-    Note: The information of the random MDP will be recorded at [here](./logs/test_random_mdp_5s5a/args.yaml)
+    Note: The information of the random MDP will be recorded at [here](./logs/test_random_mdp_5s5a/args.yaml).
 
 <!-- <center class="half">
     <kbd><img src= width='650'></kbd>
