@@ -2,8 +2,8 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-06-14 22:43:04
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-06-14 23:27:33
-FilePath: /mru/tmpppp/train/Bellman.py
+LastEditTime: 2023-06-28 13:03:51
+FilePath: /mru/APG/train/Bellman.py
 Description: 
 
 '''
@@ -40,7 +40,7 @@ class Bellman:
         for s_num in range(self.state_num):
             
             # initialize theta_0
-            self.theta_0[s_num, :] = args.initial_theta_dict[f"s{s_num+1}"]
+            self.theta_0[s_num, :] = [i if i != "-inf" else -np.inf for i in args.initial_theta_dict[f"s{s_num+1}"]]
 
             # initialize rho
             self.initial_state_distribution[s_num] = args.initial_state_distribution_dict[f"s{s_num+1}"]
@@ -60,7 +60,7 @@ class Bellman:
     # -------------- for clipping the theta list (avoid math range error) --------------
     def clip(self, theta_t):
         
-        max_theta = max(theta_t)
+        max_theta = theta_t[np.isfinite(theta_t)].max() # max(theta_t)
         return theta_t - max_theta
 
 

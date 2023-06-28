@@ -1,0 +1,157 @@
+APG_epoch_size: 100000
+APG_graphing_size:
+- 100000
+PG_epoch_size: 1000
+PG_graphing_size:
+- 1000
+V_opt: 5.313653136531367
+V_opts:
+- 5.313653136531367
+- 5.904059040590408
+- 5.804059040590407
+- 5.78228782287823
+- 5.78228782287823
+- 5.78228782287823
+action_num: 2
+chunk_size: 100000
+d_rho_opt:
+- 0.3690036900369004
+- 0.33210332103321033
+- 0.0
+- 0.0
+- 0.29889298892988936
+- -1.233581138472396e-17
+env: ./mdp_env/mdp_6s2a_Q_ordering_change.yaml
+eta: 0.00012499999999999992
+fname: mdp_6s2a_Q_ordering_change
+gamma: 0.9
+initial_state_distribution_dict:
+  s1: 1.0
+  s2: 0.0
+  s3: 0.0
+  s4: 0.0
+  s5: 0.0
+  s6: 0.0
+initial_theta_dict:
+  s1:
+  - 0.0
+  - 0.0
+  s2:
+  - 0.5
+  - 0.0
+  s3:
+  - 0.0
+  - -inf
+  s4:
+  - 0.0
+  - -inf
+  s5:
+  - 0.0
+  - 0.5
+  s6:
+  - 0.0
+  - 0.0
+log_root: ./logs
+max_iter: 100000000
+optimal_policy:
+- 0
+- 1
+- 0
+- 0
+- 0
+- 0
+random_mdp: false
+reward_dict:
+  s1_a1: 0.0
+  s1_a2: 0.0
+  s2_a1: 0.5
+  s2_a2: 0.7
+  s3_a1: 0.6
+  s3_a2: 0.0
+  s4_a1: 1.0
+  s4_a2: 0.0
+  s5_a1: 1.0
+  s5_a2: 0.0
+  s6_a1: 1.0
+  s6_a2: 0.0
+run_algos:
+- APG
+seed_num: 1
+state_action_num:
+- null
+- null
+state_num: 6
+stochastic: false
+transition_prob_dict:
+  s1a1_s1: 0.0
+  s1a1_s2: 1.0
+  s1a1_s3: 0.0
+  s1a1_s4: 0.0
+  s1a1_s5: 0.0
+  s1a1_s6: 0.0
+  s1a2_s1: 0.0
+  s1a2_s2: 0.0
+  s1a2_s3: 1.0
+  s1a2_s4: 0.0
+  s1a2_s5: 0.0
+  s1a2_s6: 0.0
+  s2a1_s1: 0.0
+  s2a1_s2: 0.0
+  s2a1_s3: 0.0
+  s2a1_s4: 1.0
+  s2a1_s5: 0.0
+  s2a1_s6: 0.0
+  s2a2_s1: 0.0
+  s2a2_s2: 0.0
+  s2a2_s3: 0.0
+  s2a2_s4: 0.0
+  s2a2_s5: 1.0
+  s2a2_s6: 0.0
+  s3a1_s1: 0.0
+  s3a1_s2: 0.0
+  s3a1_s3: 0.0
+  s3a1_s4: 0.0
+  s3a1_s5: 0.0
+  s3a1_s6: 1.0
+  s3a2_s1: 0.0
+  s3a2_s2: 0.0
+  s3a2_s3: 0.0
+  s3a2_s4: 0.0
+  s3a2_s5: 0.0
+  s3a2_s6: 1.0
+  s4a1_s1: 1.0
+  s4a1_s2: 0.0
+  s4a1_s3: 0.0
+  s4a1_s4: 0.0
+  s4a1_s5: 0.0
+  s4a1_s6: 0.0
+  s4a2_s1: 1.0
+  s4a2_s2: 0.0
+  s4a2_s3: 0.0
+  s4a2_s4: 0.0
+  s4a2_s5: 0.0
+  s4a2_s6: 0.0
+  s5a1_s1: 1.0
+  s5a1_s2: 0.0
+  s5a1_s3: 0.0
+  s5a1_s4: 0.0
+  s5a1_s5: 0.0
+  s5a1_s6: 0.0
+  s5a2_s1: 1.0
+  s5a2_s2: 0.0
+  s5a2_s3: 0.0
+  s5a2_s4: 0.0
+  s5a2_s5: 0.0
+  s5a2_s6: 0.0
+  s6a1_s1: 1.0
+  s6a1_s2: 0.0
+  s6a1_s3: 0.0
+  s6a1_s4: 0.0
+  s6a1_s5: 0.0
+  s6a1_s6: 0.0
+  s6a2_s1: 1.0
+  s6a2_s2: 0.0
+  s6a2_s3: 0.0
+  s6a2_s4: 0.0
+  s6a2_s5: 0.0
+  s6a2_s6: 0.0

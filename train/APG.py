@@ -84,6 +84,7 @@ class APG_model(Bellman, Saver):
                     
                     # momentum update
                     mom_t = copy.deepcopy(theta_t - theta_t_1)
+                    mom_t[~np.isfinite(mom_t)] = 0.
                     omega_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
 
                     # store theta_{t-1} for Nesterov's accelerating

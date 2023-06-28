@@ -26,9 +26,9 @@ class Plotter:
         self.APG_epoch_size = args.APG_epoch_size
 
         # plotting color list
-        self.color_list = [ 'lightseagreen', 'purple', \
-                            'deepskyblue', 'olivedrab', 'lightcoral', 'mediumorchid', \
-                            'yellow', 'pink', "darkgreen", 'orange', ]
+        self.color_list = [ 'lightseagreen', 'lightsalmon', \
+                            'lightskyblue', 'lightpink', 'mediumpurple', \
+                            'yellow', 'pink', "darkgreen"]
 
         # (s,a) number
         self.state_num = args.state_num
@@ -163,7 +163,7 @@ class Plotter:
         self.plot_V(axis, size)
 
         # configuration 
-        self.configure(axis)
+        self.configure(axis, red_text=True)
         plt.xticks([i * (size//5) for i in range(6)])
 
         # save plot
@@ -230,7 +230,7 @@ class Plotter:
         self.plot_mom_grad(axis, size)
 
         # configuration 
-        self.configure(axis, loc="upper left", red_text=True)
+        self.configure(axis, loc="best", red_text=True)
         plt.yticks([1e-1, 1e-3, 1e-5, 1e-7, 1e-9, 1e-11, 1e-13, 1e-15])
 
         # save plot
@@ -369,14 +369,16 @@ class Plotter:
             
             # plot
             axis.plot(df.iloc[:size][f'V({state})'].to_numpy(), \
-                        label=f"V({state}) = {round(df.iloc[size-1][f'V({state})'], 2)}", \
+                        label=f"V({state})", \
+                        #  label=f"V({state}) = {round(df.iloc[size-1][f'V({state})'], 2)}"
                         color=color, \
                         linewidth=self.linewidth)
         
         # plot V(ρ)
         self.logger(f"Plotting V(ρ)", title=False)
         axis.plot(self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy(), \
-                    label=f"V(ρ) = {round(self.df_v_rho.iloc[size-1]['V_theta(rho)'], 2)}",\
+                    label=f"V(ρ)",\
+                    # label=f"V(ρ) = {round(self.df_v_rho.iloc[size-1]['V_theta(rho)'], 2)}",\
                     color = "seagreen", \
                     linewidth=self.linewidth)
 
@@ -416,7 +418,7 @@ class Plotter:
                     color="red" if self.algo=="APG" else "blue", \
                     linewidth=self.linewidth)
         
-        axis.set_title("Log-Log Graph", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+        axis.set_title("Sub-Optimality Gap", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
         axis.set_xlabel("log(Time Steps)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
         axis.set_ylabel("-log(V* - V(ρ))", fontsize=self.fontsize, fontname='monospace', labelpad=7)
     
@@ -434,10 +436,10 @@ class Plotter:
                             columns=[f'{state}_pi_a*' for state in self.state_action_pair.keys()])
         
         # compute pre-constant mentioned in [Mei]
-        d_mu_over_mu = max(self.d_rho_opt / self.initial_state_distribution)
+        d_mu_over_mu = max(self.d_rho_opt / np.clip(self.initial_state_distribution, 1e-3, None))
         inf_pi = min([min(df.iloc[:size][f'{state}_pi_a*']) for state in self.state_action_pair.keys()])
         pre_constant = pow(d_mu_over_mu, 2) \
-                        * (1.0 / min(self.initial_state_distribution)) \
+                        * (1.0 / np.clip(min(self.initial_state_distribution), 1e-3, None)) \
                         * (16.0 * self.state_num) / (pow(inf_pi, 2) * pow(1.0 - self.gamma, 6))
 
         # plot
@@ -483,9 +485,9 @@ class Plotter:
                         color="seagreen", \
                         linewidth=self.linewidth)
         
-        axis.set_title(f"Mom-Grad Improvement", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+        axis.set_title(f"One-Step Improvement", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
         axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
-        axis.set_ylabel(f"Improvements", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+        axis.set_ylabel(f"Improvement", fontsize=self.fontsize, fontname='monospace', labelpad=7)
     
 
     def plot_onestep(self, axis, size):
@@ -493,7 +495,7 @@ class Plotter:
         # plot
         axis.plot(self.df_v_rho.iloc[1:size]["V_theta(rho)"].to_numpy() - self.df_v_rho.iloc[:size-1]["V_theta(rho)"].to_numpy(), \
                     label="Diff(V)", \
-                    color="orange", \
+                    color="seagreen", \
                     linewidth=self.linewidth)
         
         axis.set_title(f"One-Step Improvement", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -566,3 +568,277 @@ class Plotter:
         if red_text:
             offset_text.set_color('red')
         
+
+    def plot_Q(self, size: int, algo: str):
+
+        fig = plt.figure(figsize=(5*self.state_num, 4))
+
+        # specify algo
+        self.algo = algo
+
+        # configuration
+        self.legendsize = 14
+        self.fontsize = 18
+        self.offtextsize = 14
+        self.ticksize = 16
+        self.linewidth = 3.0
+
+        for num, state in enumerate(self.state_action_pair.keys()):
+
+            axis = plt.subplot(1, self.state_num, num+1)
+
+            for color, action in zip(self.color_list, self.state_action_pair[state]):
+
+                # log
+                self.logger(f"Plotting Q({state},{action})", title=False)
+
+                # read the df from .parquet
+                df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
+                                    columns=[f'Q({state},{action})'])
+                
+                # plot
+                axis.plot(df.iloc[:size][f'Q({state},{action})'].to_numpy(), \
+                            label=f"Q({state},{action})", \
+                            color=color, \
+                            linewidth=self.linewidth)
+                
+                axis.set_title("Q-value", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+                axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+                axis.set_ylabel("Q(s,·)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+
+                # configuration 
+                self.configure(axis)
+                plt.xticks([i * (size//5) for i in range(6)])
+
+        # save plot
+        plt.tight_layout()  
+        plt.savefig(os.path.join(self.logger.log_dir, f'{self.algo}', f'{self.algo}_Q.png'))
+        plt.cla()
+        plt.clf()
+        plt.close("all")
+
+    # def plot_Pi(self, algo: str):
+
+    #     fig = plt.figure(figsize=(5*self.state_num, 4))
+
+    #     # specify algo
+    #     self.algo = algo
+
+    #     # configuration
+    #     self.legendsize = 14
+    #     self.fontsize = 18
+    #     self.offtextsize = 14
+    #     self.ticksize = 16
+    #     self.linewidth = 3.0
+
+    #     for num, state in enumerate(self.state_action_pair.keys()):
+
+    #         axis = plt.subplot(1, self.state_num, num+1)
+    #         # since 1 >= pi >= 0
+    #         axis.set_ylim(bottom=0, top=1)
+
+    #         for color, action in zip(self.color_list, self.state_action_pair[state]):
+
+    #             # log
+    #             self.logger(f"Plotting π({action}|{state})", title=False)
+
+    #             # read the df from .parquet
+    #             df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
+    #                                 columns=[f'{state}_pi_{action}'])
+                
+    #             # plot
+    #             left = 0
+    #             right = 40000
+    #             axis.plot(range(left, right), \
+    #                         df.iloc[left:right][f'{state}_pi_{action}'].to_numpy(), \
+    #                         label=f"π({action}|{state})", \
+    #                         color=color, \
+    #                         linewidth=self.linewidth)
+                
+    #             axis.set_title("Policy Weight", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+    #             axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+    #             axis.set_ylabel("π(·|s)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+
+    #             # configuration 
+    #             self.configure(axis, sci=True)
+    #             plt.xticks([left + i * ((right-left)//5) for i in range(6)])
+
+        
+        
+
+    #     # save plot
+    #     plt.tight_layout()  
+    #     plt.savefig(os.path.join(self.logger.log_dir, f'{self.algo}', f'{self.algo}_pi.png'))
+    #     plt.cla()
+    #     plt.clf()
+    #     plt.close("all")
+    
+
+    # def plot_Theta(self, algo: str):
+
+    #     fig = plt.figure(figsize=(5*self.state_num, 4))
+
+    #     # specify algo
+    #     self.algo = algo
+
+    #     # configuration
+    #     self.legendsize = 14
+    #     self.fontsize = 18
+    #     self.offtextsize = 14
+    #     self.ticksize = 16
+    #     self.linewidth = 3.0
+
+    #     for num, state in enumerate(self.state_action_pair.keys()):
+
+    #         axis = plt.subplot(1, self.state_num, num+1)
+
+    #         for color, action in zip(self.color_list, self.state_action_pair[state]):
+
+    #             # log
+    #             self.logger(f"Plotting θ({state}, {action})", title=False)
+
+    #             # read the df from .parquet
+    #             df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
+    #                                 columns=[f'{state}_theta_{action}'])
+                
+    #             # plot
+    #             left = 1
+    #             right = 40000
+    #             axis.semilogy(range(left, right), \
+    #                         df.iloc[left:right][f'{state}_theta_{action}'].to_numpy(), \
+    #                         label=f"θ({state}, {action})", \
+    #                         color=color, \
+    #                         linewidth=self.linewidth)
+            
+    #             axis.set_title("Theta", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+    #             axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+    #             axis.set_ylabel("θ(s,·)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+
+    #             # configuration 
+    #             self.configure(axis, sci=True)
+    #             plt.xticks([left + i * ((right-left)//5) for i in range(6)])
+
+    #     # save plot
+    #     plt.tight_layout()  
+    #     plt.savefig(os.path.join(self.logger.log_dir, f'{self.algo}', f'{self.algo}_theta.png'))
+    #     plt.cla()
+    #     plt.clf()
+    #     plt.close("all")
+
+
+
+
+    #     fig = plt.figure(figsize=(5*self.action_num, 4*self.state_num))
+
+    #     # specify algo
+    #     self.algo = algo
+
+    #     # configuration
+    #     self.legendsize = 14
+    #     self.fontsize = 18
+    #     self.offtextsize = 14
+    #     self.ticksize = 16
+    #     self.linewidth = 3.0
+
+    #     # compute V(ρ)
+    #     self.df_v_rho = self.compute_V_rho()
+
+    #     # One step improvement
+    #     k=1
+    #     for num, state in enumerate(self.state_action_pair.keys()):
+            
+    #         for color, action in zip(self.color_list, self.state_action_pair[state]):
+                
+    #             axis = plt.subplot(self.state_num, self.action_num, k)
+    #             k+=1
+    #             # log
+    #             self.logger(f"Plotting mom({state}, {action}), grad({state}, {action})", title=False)
+
+    #             # read the df from .parquet
+    #             df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
+    #                                 columns=[f'{state}_theta_{action}', f'{state}_omega_{action}'])
+                
+    #             # plot
+    #             left = 1
+    #             right = 40000
+    #             axis.semilogy(range(left, right), \
+    #                         df.iloc[left:right][f'{state}_theta_{action}'].to_numpy() - df.iloc[left-1:right-1][f'{state}_omega_{action}'].to_numpy(), \
+    #                         label=f"grad({state}, {action})", \
+    #                         color=color, \
+    #                         linestyle=":", \
+    #                         linewidth=self.linewidth)
+                
+    #             axis.semilogy(range(left, right), \
+    #                         df.iloc[left+1:right+1][f'{state}_omega_{action}'].to_numpy() - df.iloc[left+1:right+1][f'{state}_theta_{action}'].to_numpy(), \
+    #                         label=f"mom({state}, {action})", \
+    #                         color=color, \
+    #                         linewidth=self.linewidth)
+                
+    #             # configuration 
+    #             plt.yscale('symlog', linthresh=1e-8)
+    #             self.configure(axis, sci=True)
+    #             plt.xticks([left + i * ((right-left)//5) for i in range(6)])
+
+
+
+    #             axis.set_title("M-G", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+    #             axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+        
+    #     # save plot
+    #     plt.tight_layout()  
+    #     plt.savefig(os.path.join(self.logger.log_dir, f'{self.algo}', f'{self.algo}_mg.png'))
+    #     plt.cla()
+    #     plt.clf()
+    #     plt.close("all")
+    
+    # def plot_Adv(self, algo: str):
+
+    #     fig = plt.figure(figsize=(5*self.state_num, 4))
+
+    #     # specify algo
+    #     self.algo = algo
+
+    #     # configuration
+    #     self.legendsize = 14
+    #     self.fontsize = 18
+    #     self.offtextsize = 14
+    #     self.ticksize = 16
+    #     self.linewidth = 3.0
+
+    #     for num, state in enumerate(self.state_action_pair.keys()):
+
+    #         axis = plt.subplot(1, self.state_num, num+1)
+
+    #         for color, action in zip(self.color_list, self.state_action_pair[state]):
+
+    #             # log
+    #             self.logger(f"Plotting Adv({state}, {action})", title=False)
+
+    #             # read the df from .parquet
+    #             df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
+    #                                 columns=[f'Adv({state},{action})'])
+                
+    #             # plot
+    #             left = 1
+    #             right = 40000
+    #             axis.semilogy(range(left, right), \
+    #                         df.iloc[left:right][f'Adv({state},{action})'].to_numpy(), \
+    #                         label=f"Adv({state},{action})", \
+    #                         color=color, \
+    #                         linewidth=self.linewidth)
+            
+    #             axis.set_title("Theta", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+    #             axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+    #             axis.set_ylabel("Adv(s,·)", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+
+    #             # configuration 
+    #             plt.yscale('symlog', linthresh=1e-8)
+    #             self.configure(axis, sci=True)
+    #             plt.xticks([left + i * ((right-left)//5) for i in range(6)])
+
+    #     # save plot
+    #     plt.tight_layout()  
+    #     plt.savefig(os.path.join(self.logger.log_dir, f'{self.algo}', f'{self.algo}_adv.png'))
+    #     plt.cla()
+    #     plt.clf()
+    #     plt.close("all")

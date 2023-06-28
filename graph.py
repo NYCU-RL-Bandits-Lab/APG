@@ -2,8 +2,8 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-02-11 00:09:40
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-06-15 11:35:36
-FilePath: /mru/tmpppp/graph.py
+LastEditTime: 2023-06-28 14:22:04
+FilePath: /mru/APG/graph.py
 Description: 
     
 '''
@@ -31,6 +31,10 @@ parser.add_argument('--plot_Value', default=False, action='store_true')
 parser.add_argument('--plot_LogLog', default=False, action='store_true')
 parser.add_argument('--plot_MomGrad', default=False, action='store_true')
 parser.add_argument('--plot_OneStep', default=False, action='store_true')
+parser.add_argument('--plot_Q', default=False, action='store_true')
+parser.add_argument('--plot_Pi', default=False, action='store_true')
+parser.add_argument('--plot_Theta', default=False, action='store_true')
+parser.add_argument('--plot_Adv', default=False, action='store_true')
 args = parser.parse_args()
 
 # load the arg from .yaml
@@ -77,5 +81,29 @@ if args.plot_OneStep:
     for size in args.graphing_size:
         
         plotter.plot_OneStep(size, args.algo)
+
+if args.plot_Q:
+    
+    for size in args.graphing_size:
+        
+        plotter.plot_Q(size, args.algo)
+
+if args.plot_Pi:
+    
+    for size in args.graphing_size:
+
+        plotter.plot_Pi(args.algo)
+
+if args.plot_Theta:
+    
+    for size in args.graphing_size:
+
+        plotter.plot_Theta(args.algo)
+
+if args.plot_Adv:
+    
+    for size in args.graphing_size:
+
+        plotter.plot_Adv(args.algo)
 
 logger(f"Finish Plotting", title=True)
