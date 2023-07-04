@@ -3,7 +3,7 @@
  # @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  # @Date: 2023-06-24 13:26:03
  # @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- # @LastEditTime: 2023-06-26 21:53:06
+ # @LastEditTime: 2023-07-04 23:57:43
  # @FilePath: /mru/APG/scripts/run_mdp_5s5a_hard.sh
  # @Description: 
  # 
@@ -43,7 +43,7 @@ python3 graph.py --log_dir ./logs/$env \
 python3 graph.py --log_dir ./logs/$env \
                 --plot_Value \
                 --algo APG \
-                --graphing_size 20000
+                --graphing_size 200000
 python3 graph.py --log_dir ./logs/$env \
                 --plot_Value \
                 --algo PG \
