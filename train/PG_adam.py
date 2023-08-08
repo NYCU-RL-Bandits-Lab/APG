@@ -92,8 +92,8 @@ class PG_adam_model(Bellman, Saver):
                 v_t = beta_2 * v_t + (1 - beta_2) * (delta_theta_t ** 2)
                 m_t_hat = m_t / (1 - (beta_1 ** (timestep + 1)))
                 v_t_hat = v_t / (1 - (beta_2 ** (timestep + 1)))
-                # theta_t += alpha * m_t_hat / (v_t_hat + epsilon)
-                theta_t += self.eta * delta_theta_t
+                theta_t += alpha * m_t_hat / (v_t_hat + epsilon)
+                # theta_t += self.eta * delta_theta_t
 
                 # set pbar
                 pbar.set_postfix_str(f"V_t: {[round(v[0],3) for v in V_t]}")
