@@ -1,3 +1,12 @@
+'''
+Author: Yen-Ju Chen  mru.11@nycu.edu.tw
+Date: 2023-08-04 09:14:40
+LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
+LastEditTime: 2023-08-08 20:44:14
+FilePath: /mru/APG/train/PG_heavy_ball.py
+Description: 
+
+'''
 # package
 import os
 import copy                               # important copy by value, not reference!!!...
@@ -43,7 +52,7 @@ class PG_heavy_ball_model(Bellman, Saver):
             self.set_seed_save_path(seed, self.logger)
 
             # set tqdm
-            pbar = tqdm(range(epoch), position=1)
+            pbar = tqdm(range(epoch), position=3)
 
             # init theta
             theta_t = copy.deepcopy(self.theta_0)
