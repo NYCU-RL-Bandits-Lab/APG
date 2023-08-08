@@ -1,8 +1,14 @@
 APG_epoch_size: 1000
 APG_graphing_size:
 - 1000
+PG_adam_epoch_size: 1000
+PG_adam_graphing_size:
+- 1000
 PG_epoch_size: 1000
 PG_graphing_size:
+- 1000
+PG_heavy_ball_epoch_size: 1000
+PG_heavy_ball_graphing_size:
 - 1000
 V_opt: 9.999999999999996
 V_opts:
@@ -45,6 +51,8 @@ reward_dict:
 run_algos:
 - APG
 - PG
+- PG_heavy_ball
+- PG_adam
 seed_num: 1
 state_action_num:
 - null

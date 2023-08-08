@@ -24,6 +24,8 @@ class Plotter:
         # epoch size
         self.PG_epoch_size = args.PG_epoch_size
         self.APG_epoch_size = args.APG_epoch_size
+        self.PG_adam_epoch_size = args.PG_adam_epoch_size
+        self.PG_heavy_ball_epoch_size = args.PG_heavy_ball_epoch_size
 
         # plotting color list
         self.color_list = [ 'lightseagreen', 'lightsalmon', \
@@ -76,6 +78,14 @@ class Plotter:
         for (s_num, state) in enumerate([f's{s_num+1}' for s_num in range(self.state_num)]):
             self.state_action_pair[state] = [f'a{a_num+1}' for a_num in range(self.action_num)]
             self.state_action_pair[state][self.optimal_policy[s_num]] = "a*"
+        
+        # algo color
+        self.color_dict = {
+            'APG': 'blue',
+            'PG': 'red',
+            'PG_heavy_ball': 'darkorange',
+            'PG_adam': 'mediumpurple',
+        }
         
 
     def plot_Summary(self, size: int, algo: str):
@@ -256,7 +266,7 @@ class Plotter:
         axis = plt.subplot(1, 1, 1)
         
         # Plot on same graph
-        for algo in ["PG", "APG"]:
+        for algo in ["PG", "APG", "PG_heavy_ball", "PG_adam"]:
 
             # specify algo
             self.algo = algo
@@ -395,7 +405,7 @@ class Plotter:
         # plot
         axis.plot(-np.log(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy()), \
                     label="V(ρ)", \
-                    color="red" if self.algo=="APG" else "blue", \
+                    color=self.color_dict[self.algo], \
                     linewidth=self.linewidth)
         
         axis.set_title("-Log Loss", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -415,7 +425,7 @@ class Plotter:
         axis.plot(np.log(range(1, size+1)), \
                     log_loss, \
                     label=self.algo, \
-                    color="red" if self.algo=="APG" else "blue", \
+                    color=self.color_dict[self.algo], \
                     linewidth=self.linewidth)
         
         axis.set_title("Sub-Optimality Gap", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
@@ -445,7 +455,7 @@ class Plotter:
         # plot
         axis.semilogy(self.V_opt -self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy(), \
                     label=self.algo, \
-                    color="red" if self.algo=="APG" else "blue", \
+                    color=self.color_dict[self.algo], \
                     linewidth=self.linewidth)
         axis.semilogy(range(1, size+1),
                     [pre_constant / (t * t) for t in range(1, size+1)], \
@@ -506,7 +516,14 @@ class Plotter:
     def compute_V_rho(self):
         
         # epoch size
-        epoch_size = self.PG_epoch_size if self.algo == "PG" else self.APG_epoch_size
+        if self.algo == "PG":
+            epoch_size = self.PG_epoch_size
+        elif self.algo == "APG":
+            epoch_size = self.APG_epoch_size
+        elif self.algo == "PG_heavy_ball":
+            epoch_size = self.PG_heavy_ball_epoch_size
+        elif self.algo == "PG_adam":
+            epoch_size = self.PG_adam_epoch_size
 
         # log
         self.logger(f"Computing V(ρ)", title=False)
@@ -520,10 +537,10 @@ class Plotter:
             self.logger(f"Logging V({state})", title=False)
 
             # read the df from .parquet
-            if self.algo == "PG":
+            if self.algo in ["PG", "PG_adam"]:
                 df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
                                     columns=[f'V({state})'])
-            elif self.algo == "APG":
+            elif self.algo in ["APG", "PG_heavy_ball"]:
                 df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
                                     columns=[f'V({state})', f'V_omega({state})'])
                 # accumulate V(ρ)

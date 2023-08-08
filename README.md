@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-06-26 22:36:13
+ * @LastEditTime: 2023-08-08 20:30:13
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -76,6 +76,16 @@ Note: Add `.yaml` in the directory `./mdp_env` if you want to test other MDP / b
     and `./logs/test/PG/PG_summary_1000.png`:
     <center class="half">
         <kbd><img src=./logs/test/PG/PG_summary_1000.png></kbd>
+    </center>
+
+    and `./logs/test/PG_heavy_ball/PG_heavy_ball_summary_1000.png`:
+    <center class="half">
+        <kbd><img src=./logs/test/PG_heavy_ball/PG_heavy_ball_summary_1000.png></kbd>
+    </center>
+
+    and `./logs/test/PG_adam/PG_adam_summary_1000.png`:
+    <center class="half">
+        <kbd><img src=./logs/test/PG_adam/PG_adam_summary_1000.png></kbd>
     </center>
 
 - Run `graph.py` to get more plot:

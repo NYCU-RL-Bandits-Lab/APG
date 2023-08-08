@@ -118,7 +118,13 @@ def check_env(args, logger):
         logger(f"Setting APG_graphing_size = APG_epoch_size = {args.APG_epoch_size}", title=True)
     if args.PG_graphing_size == [None]:
         args.PG_graphing_size = [args.PG_epoch_size]
-        logger(f"Setting PG_graphing_size = PG_epoch_size = {args.APG_epoch_size}", title=True)
+        logger(f"Setting PG_graphing_size = PG_epoch_size = {args.PG_epoch_size}", title=True)
+    if args.PG_heavy_ball_graphing_size == [None]:
+        args.PG_heavy_ball_graphing_size = [args.PG_heavy_ball_epoch_size]
+        logger(f"Setting PG_heavy_ball_graphing_size = PG_heavy_ball_epoch_size = {args.PG_heavy_ball_epoch_size}", title=True)
+    if args.PG_adam_graphing_size == [None]:
+        args.PG_adam_graphing_size = [args.PG_adam_epoch_size]
+        logger(f"Setting PG_adam_graphing_size = PG_adam_epoch_size = {args.PG_adam_epoch_size}", title=True)
 
     # adapt lr to [Mei et al., ICML 2020]
     if args.gamma != 0:

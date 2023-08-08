@@ -164,6 +164,7 @@ myenv/*
 
 # log file
 **/mean.parquet
+**/mean.parquet.gz
 
 # testing .py
 test.py

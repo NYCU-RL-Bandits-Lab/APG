@@ -1,3 +1,12 @@
+'''
+Author: Yen-Ju Chen  mru.11@nycu.edu.tw
+Date: 2023-06-15 13:39:44
+LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
+LastEditTime: 2023-08-08 20:15:10
+FilePath: /mru/APG/train/Saver.py
+Description: 
+
+'''
 # package
 import os
 import numpy as np
@@ -26,7 +35,7 @@ class Saver:
             self.state_action_pair[state][self.optimal_policy[s_num]] = "a*"
         
         # recording columns for .parquet 
-        if self.algo == "PG":
+        if self.algo in ["PG", "PG_adam"]:
             self.record_columns = [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_delta_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
@@ -36,7 +45,7 @@ class Saver:
                                 + [f"d_{state1}({state2})" for state1 in self.state_action_pair.keys() for state2 in self.state_action_pair.keys()] \
                                 + [f"d_rho({state})" for state in self.state_action_pair.keys()]
 
-        elif self.algo == "APG":
+        elif self.algo in ["APG", "PG_heavy_ball"]:
             self.record_columns = [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 +[f'{state}_omega_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
