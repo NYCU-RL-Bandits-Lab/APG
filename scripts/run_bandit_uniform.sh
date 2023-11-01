@@ -3,7 +3,7 @@
  # @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  # @Date: 2023-06-15 10:38:24
  # @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- # @LastEditTime: 2023-06-15 21:57:46
+ # @LastEditTime: 2023-09-18 13:49:56
  # @FilePath: /mru/APG/scripts/run_bandit_uniform.sh
  # @Description: 
  # 
@@ -35,12 +35,16 @@ python3 main.py --log_root ./logs \
                 --APG_graphing_size 10000000 \
                 --PG_epoch_size 100000000 \
                 --PG_graphing_size 10000000 \
-                --env ./mdp_env/$env.yaml
+                --PG_adam_epoch_size 100000000 \
+                --PG_adam_graphing_size 10000000 \
+                --PG_heavy_ball_epoch_size 100000000 \
+                --PG_heavy_ball_graphing_size 10000000 \
+                --env ./mdp_env/$env.yaml --run_algos APG
 # graph
-python3 graph.py --log_dir ./logs/$env \
-                --plot_LogLog \
-                --graphing_size 100000000
-python3 graph.py --log_dir ./logs/$env \
-                --algo APG \
-                --plot_MomGrad \
-                --graphing_size 20000
+# python3 graph.py --log_dir ./logs/$env \
+#                 --plot_LogLog \
+#                 --graphing_size 100000000
+# python3 graph.py --log_dir ./logs/$env \
+#                 --algo APG \
+#                 --plot_MomGrad \
+#                 --graphing_size 20000

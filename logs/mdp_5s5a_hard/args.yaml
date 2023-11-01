@@ -1,25 +1,31 @@
 APG_epoch_size: 100000000
 APG_graphing_size:
-- 10000000
+- 1000000
+PG_adam_epoch_size: 100000000
+PG_adam_graphing_size:
+- 1000000
 PG_epoch_size: 100000000
 PG_graphing_size:
-- 10000000
-V_opt: 9.408398506373338
+- 1000000
+PG_heavy_ball_epoch_size: 100000000
+PG_heavy_ball_graphing_size:
+- 1000000
+V_opt: 9.408398506373334
 V_opts:
 - 9.467508836288786
-- 9.475873582981842
-- 9.462354676194098
-- 9.190898144174339
-- 9.392403798579089
+- 9.47587358298184
+- 9.462354676194094
+- 9.190898144174335
+- 9.392403798579085
 action_num: 5
 chunk_size: 100000
 d_rho_opt:
-- 0.2638052490152287
-- 0.302078202180848
-- 0.1
-- 0.1287424724113706
-- 0.20537407639255265
-env: ./mdp_env/mdp_5s5a_hard.yaml
+- 0.26380524901522867
+- 0.30207820218084797
+- 0.09999999999999996
+- 0.12874247241137055
+- 0.2053740763925526
+env: /home/u7409556/APG/mdp_env/mdp_5s5a_hard.yaml
 eta: 0.00012499999999999992
 fname: mdp_5s5a_hard
 gamma: 0.9
@@ -60,7 +66,7 @@ initial_theta_dict:
   - 3.0
   - 5.0
   - 1.0
-log_root: ./logs
+log_root: /work1/u7409556/APG/logs
 max_iter: 100000000
 optimal_policy:
 - 0
@@ -96,8 +102,10 @@ reward_dict:
   s5_a4: 0.2
   s5_a5: 0.9
 run_algos:
-- APG
 - PG
+- APG
+- PG_heavy_ball
+- PG_adam
 seed_num: 1
 state_action_num:
 - null

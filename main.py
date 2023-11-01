@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-01-30 16:33:40
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-08-08 20:27:30
+LastEditTime: 2023-10-26 10:33:37
 FilePath: /mru/APG/main.py
 Description: 
     Test convergence of APG & PG Actor-Critic under softmax parameterization
@@ -63,61 +63,27 @@ def main():
     save_param(args.__dict__, log_dir)
 
 
-    # -------------- APG & PG under true credict & softmax parameterization --------------
-    logger(f"Running", title=True)
-
-    if "PG" in args.run_algos and "APG" in args.run_algos and "PG_heavy_ball" in args.run_algos:
-        
-        # construct pool
-        pool = mp.Pool()
-        
-        # construct model
-        PG = PG_model(args, logger)
-        APG = APG_model(args, logger)
-        PG_adam = PG_adam_model(args, logger)
-        PG_heavy_ball = PG_heavy_ball_model(args, logger)
-
-        # multiprocessing
-        pool.apply_async(PG.learn, args = (args.PG_epoch_size, ))
-        pool.apply_async(APG.learn, args = (args.APG_epoch_size, ))
-        pool.apply_async(PG_adam.learn, args = (args.PG_adam_epoch_size, ))
-        pool.apply_async(PG_heavy_ball.learn, args = (args.PG_heavy_ball_epoch_size, ))
-        pool.close()
-        pool.join()
-
-    else:
-        
-        if "PG" in args.run_algos:
-
-            # construct model
-            PG = PG_model(args, logger)
-
-            # run
-            PG.learn(args.PG_epoch_size)
+    # -------------- Run algo under true critic & softmax parameterization --------------
+    # construct pool
+    pool = mp.Pool()
     
-        if "APG" in args.run_algos:
+    # construct model
+    PG = PG_model(args, logger)
+    APG = APG_model(args, logger)
+    PG_adam = PG_adam_model(args, logger)
+    PG_heavy_ball = PG_heavy_ball_model(args, logger)
+    models = {
+        'PG': (PG, args.PG_epoch_size),
+        'APG': (APG, args.APG_epoch_size),
+        'PG_adam': (PG_adam, args.PG_adam_epoch_size),
+        'PG_heavy_ball': (PG_heavy_ball, args.PG_heavy_ball_epoch_size),
+    }
 
-            # construct model
-            APG = APG_model(args, logger)
-
-            # run
-            APG.learn(args.APG_epoch_size)
-        
-        if "PG_heavy_ball" in args.run_algos:
-
-            # construct model
-            PG_heavy_ball = PG_heavy_ball_model(args, logger)
-
-            # run
-            PG_heavy_ball.learn(args.PG_heavy_ball_epoch_size)
-        
-        if "PG_adam" in args.run_algos:
-
-            # construct model
-            PG_adam = PG_adam_model(args, logger)
-
-            # run
-            PG_adam.learn(args.PG_adam_epoch_size)
+    # multiprocessing
+    for algo in args.run_algos:
+        pool.apply_async(models[algo][0].learn, args = (models[algo][1], ))
+    pool.close()
+    pool.join()
 
 
     # -------------- plot --------------
@@ -128,7 +94,7 @@ def main():
         
         # data preprocess
         if args.stochastic:
-            date_preprocessing(args.seed_num, os.path.join(log_dir, algo))
+            date_preprocessing(args.seed_num, os.path.join(log_dir, algo), logger)
 
         if algo == "PG":
             graphing_size = args.PG_graphing_size 

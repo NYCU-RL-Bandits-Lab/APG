@@ -3,7 +3,7 @@
  # @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  # @Date: 2023-06-24 13:26:03
  # @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- # @LastEditTime: 2023-07-04 23:57:43
+ # @LastEditTime: 2023-08-21 01:10:20
  # @FilePath: /mru/APG/scripts/run_mdp_5s5a_hard.sh
  # @Description: 
  # 
@@ -35,20 +35,24 @@ python3 main.py --log_root ./logs \
                 --APG_graphing_size 1000000 \
                 --PG_epoch_size 100000000 \
                 --PG_graphing_size 1000000 \
-                --env ./mdp_env/$env.yaml
+                --PG_adam_epoch_size 100000000 \
+                --PG_adam_graphing_size 1000000 \
+                --PG_heavy_ball_epoch_size 100000000 \
+                --PG_heavy_ball_graphing_size 1000000 \
+                --env ./mdp_env/$env.yaml --run_algos PG_heavy_ball PG_adam
 # graph
 python3 graph.py --log_dir ./logs/$env \
                 --plot_LogLog \
                 --graphing_size 100000000
-python3 graph.py --log_dir ./logs/$env \
-                --plot_Value \
-                --algo APG \
-                --graphing_size 200000
-python3 graph.py --log_dir ./logs/$env \
-                --plot_Value \
-                --algo PG \
-                --graphing_size 50000000
-python3 graph.py --log_dir ./logs/$env \
-                --algo APG \
-                --plot_MomGrad \
-                --graphing_size 6000
+# python3 graph.py --log_dir ./logs/$env \
+#                 --plot_Value \
+#                 --algo APG \
+#                 --graphing_size 200000
+# python3 graph.py --log_dir ./logs/$env \
+#                 --plot_Value \
+#                 --algo PG \
+#                 --graphing_size 50000000
+# python3 graph.py --log_dir ./logs/$env \
+#                 --algo APG \
+#                 --plot_MomGrad \
+#                 --graphing_size 6000

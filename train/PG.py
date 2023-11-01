@@ -48,6 +48,7 @@ class PG_model(Bellman, Saver):
             theta_t = copy.deepcopy(self.theta_0)
             delta_theta_t = np.zeros_like(theta_t)
             epoch_record = np.zeros(shape=(self.chunk_size, len(self.record_columns)), dtype=np.float64)
+            selection = [1, 1]      # [selected state, selected action]
 
             # run
             for timestep in pbar:
@@ -65,11 +66,13 @@ class PG_model(Bellman, Saver):
                 d_t, d_rho_t = self.compute_d(pi_t)
 
                 # record
-                epoch_record[timestep % self.chunk_size, :] = np.concatenate((pi_t, theta_t, delta_theta_t, V_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((pi_t, theta_t, delta_theta_t, V_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((record, selection)) if self.seed_num > 1 else record
+                epoch_record[timestep % self.chunk_size, :] = record
 
                 # policy gradient
                 if self.stochastic:
-                    delta_theta_t = self.compute_stochastic_grad(pi_t, Adv_t, d_rho_t)
+                    delta_theta_t, selection = self.compute_stochastic_grad(pi_t, Adv_t, d_rho_t)
                 else:
                     delta_theta_t = self.compute_true_grad(pi_t, Adv_t, d_rho_t)
 

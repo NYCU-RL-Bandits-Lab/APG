@@ -2,41 +2,46 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-08-08 20:30:13
+ * @LastEditTime: 2023-11-01 11:48:03
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
 -->
 # Accelerated Policy Gradient (APG)
-**Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning**
+**Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning** [\[arXiv\]](https://arxiv.org/abs/2310.11897)
 
 Yen-Ju Chen, Nai-Chieh Huang, [Ping-Chun Hsieh](https://pinghsieh.github.io/)
 
 *ICML 2023 Workshop on New Frontiers in Learning, Control, and Dynamical Systems*
+[\[Paper\]](./assests/APG-ICML-workshop-paper.pdf.pdf), [\[Poster\]](./assests/APG-ICML-workshop-poster.pdf)
 
-[\[Paper\]](TBD), [\[Poster\]](TBD)
 
 <br/><br/>
 ## Folder Structure
 ```
 .
 ├── assests/
-│   └── TBD
+│   └── APG-ICML-workshop-paper.pdf.pdf
+│   └── APG-ICML-workshop-poster.pdf
 ├── helper/
 │   ├── plot.py
 │   └── utils.py
 ├── mdp_env/
 │   ├── bandit_hard.yaml
 │   ├── bandit_non_monotone.yaml
-│   └── bandit_uniform.yaml
+│   ├── bandit_non_monotone.yaml
+│   └── ...
 ├── scripts/
 │   ├── run_bandit_hard.sh
 │   ├── run_bandit_non_monotone.sh
 │   └── run_bandit_uniform.sh
+│   └── ...
 ├── train/
 │   ├── APG.py
 │   ├── Bellman.py
 │   ├── parameters.py
+│   ├── PG_adam.py
+│   ├── PG_heavy_ball.py
 │   ├── PG.py
 │   ├── PI.py
 │   └── Saver.py
@@ -144,5 +149,10 @@ Run the following code to reproduce the numerical results presented in the paper
 If you find our repository helpful to your research, please cite our paper:
 
 ```
-TBD
+@article{chen2023accelerated,
+  title={Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning},
+  author={Chen, Yen-Ju and Huang, Nai-Chieh and Hsieh, Ping-Chun},
+  journal={arXiv preprint arXiv:2310.11897},
+  year={2023}
+}
 ```

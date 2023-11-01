@@ -6,6 +6,7 @@ import shutil
 import random
 import argparse
 import numpy as np
+import pandas as pd
 from datetime import datetime
 from termcolor import colored, cprint
 
@@ -62,7 +63,7 @@ class Logger:
             # make directory
             self.make_directory(self.log_dir, args.fname, args.run_algos)
 
-    def __call__(self, text: str, title: bool):
+    def __call__(self, text: str, title: bool = False):
 
         # stdout
         if title:
@@ -166,55 +167,51 @@ def check_env(args, logger):
 
 
 # -------------- data preprocessing --------------
-def date_preprocessing(seed_num: int, log_dir: str):
+def date_preprocessing(seed_num: int, log_dir: str, logger: object):
     pass
 
-    # # logger(f"Data Preprocessing...", title=True)
+    logger(f"Data Preprocessing...", title=True)
 
-    # if seed_num > 1:
+    if seed_num > 1:
         
-    #     start = time.time()
-    #     print("\nPreprocessing...\n")
+        start = time.time()
 
-    #     # read parquet
-    #     seed_df = pd.read_parquet(os.path.join(log_dir, f'seed_{0}.parquet'))
-
-    #     # storing the same item based on different seed
-    #     df = {}
-    #     for item in df.keys():
-    #         df[item] =  pd.DataFrame()
+        # storing the same item based on different seed
+        df = {}
+        for item in df.keys():
+            df[item] =  pd.DataFrame()
         
-    #     # read all csv under different seed
-    #     for seed in range(seed_num):
-    #         seed_df = pd.read_parquet(os.path.join(log_dir, f'seed_{seed}.parquet'))
-    #         for item in seed_df.keys():
-    #             if seed == 0:
-    #                 df[item] = seed_df[item]
-    #             else:
-    #                 df[item] = pd.concat([df[item], seed_df[item]], axis=1)
+        # read all csv under different seed
+        for seed in range(seed_num):
+            seed_df = pd.read_parquet(os.path.join(log_dir, f'seed_{seed}.parquet'))
+            for item in seed_df.keys():
+                if seed == 0:
+                    df[item] = seed_df[item].copy()
+                else:
+                    df[item] = pd.concat([df[item], seed_df[item]], axis=1)
 
-    #     # compute mean & std, save into .parquet
-    #     mean_df = pd.DataFrame()
-    #     std_df = pd.DataFrame()
-    #     for item in df.keys():
-    #         if ("pi" in item) or ("V" in item) or ("d_mu" in item):
-    #             mean_df[item] = df[item].mean(axis=1).rename(item+'_mean')
-    #             std_df[item] = df[item].std(axis=1).rename(item+'_std')
-    #         else:
-    #             mean_df[item] = df[item].mean(axis=1).rename(item+'_mean')
+        # compute mean & std, save into .parquet
+        mean_df = pd.DataFrame()
+        std_df = pd.DataFrame()
+        for item in df.keys():
+            if ("pi" in item) or ("V" in item) or ("d_rho" in item):
+                mean_df[item] = df[item].mean(axis=1).rename(item+'_mean')
+                std_df[item] = df[item].std(axis=1).rename(item+'_std')
+            else:
+                mean_df[item] = df[item].mean(axis=1).rename(item+'_mean')
         
-    #     # delete the memory monster
-    #     del df
+        # delete the memory monster
+        del df
 
-    #     # save file
-    #     mean_df.to_parquet(os.path.join(log_dir, f'mean.parquet'))
-    #     std_df.to_parquet(os.path.join(log_dir, f'std.parquet'))
+        # save file
+        mean_df.to_parquet(os.path.join(log_dir, f'mean.parquet'))
+        std_df.to_parquet(os.path.join(log_dir, f'std.parquet'))
 
-    #     # delete the seed file
-    #     for seed in range(seed_num):
-    #         os.remove(os.path.join(log_dir, f'seed_{seed}.parquet'))
+        # delete the seed file
+        for seed in range(seed_num):
+            os.remove(os.path.join(log_dir, f'seed_{seed}.parquet'))
         
-    #     print(f"It took {round(time.time()-start, 2)} sec for data preprocessing.\n")
+        logger(f"It took {round(time.time()-start, 2)} sec for data preprocessing.\n")
 
 
 # -------------- randomly genereate an MDP --------------

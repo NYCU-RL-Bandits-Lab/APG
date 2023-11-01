@@ -52,6 +52,7 @@ class APG_model(Bellman, Saver):
             mom_t = np.zeros_like(theta_t)
             grad_t = np.zeros_like(theta_t)
             epoch_record = np.zeros(shape=(self.chunk_size, len(self.record_columns)), dtype=np.float64)
+            selection = [1, 1]      # [selected state, selected action]
 
             # run
             for timestep in pbar:
@@ -66,29 +67,56 @@ class APG_model(Bellman, Saver):
                 # compute V, Q, Adv
                 V_t, Q_t, Adv_t = self.compute_V_Q_Adv(pi_t)
                 V_omega_t, Q_omega_t, Adv_omega_t = self.compute_V_Q_Adv(omega_pi_t)
+                V_rho_t = sum(V_t.squeeze() * self.initial_state_distribution) if self.state_num > 1 else V_t.squeeze()
 
                 # compute discounted state visitation distribution
                 d_t, d_rho_t = self.compute_d(pi_t)
                 d_omega_t, d_rho_omega_t = self.compute_d(pi_t)
 
                 # record
-                epoch_record[timestep % self.chunk_size, :] = np.concatenate((pi_t, omega_pi_t, theta_t, omega_t, mom_t, grad_t, V_t, V_omega_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((pi_t, omega_pi_t, theta_t, omega_t, mom_t, grad_t, V_t, V_omega_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((record, selection)) if self.seed_num > 1 else record
+                epoch_record[timestep % self.chunk_size, :] = record
 
                 # policy gradient
                 if self.stochastic:
-                    pass
+                    grad_t, selection = self.compute_stochastic_grad(omega_pi_t, Adv_omega_t, d_rho_omega_t)
                 else:
                     # true gradient update
                     grad_t = self.compute_true_grad(omega_pi_t, Adv_omega_t, d_rho_omega_t)
-                    theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t
-                    
-                    # momentum update
-                    mom_t = copy.deepcopy(theta_t - theta_t_1)
-                    mom_t[~np.isfinite(mom_t)] = 0.
-                    omega_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
+                
+                theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t
+                # print(f"theta_{timestep}: ", theta_t)
+                
+                # momentum update
+                mom_t = copy.deepcopy(theta_t - theta_t_1)
+                mom_t[~np.isfinite(mom_t)] = 0.
+                # omega_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
+                
+                phi_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
+                phi_pi_t = self.compute_pi(phi_t)
+                V_phi_t, _, _ = self.compute_V_Q_Adv(phi_pi_t)
+                V_phi_rho_t = sum(V_phi_t.squeeze() * self.initial_state_distribution) if self.state_num > 1 else V_phi_t.squeeze()
 
-                    # store theta_{t-1} for Nesterov's accelerating
-                    theta_t_1 = copy.deepcopy(theta_t)
+                # monotone
+                monotone = V_phi_rho_t + 1e-12 >= V_rho_t
+                # monotone = all((V_phi_t.squeeze() + 1e-12) >= V_t.squeeze()) if self.state_num > 1 else ((V_phi_t.squeeze() + 1e-12) >= V_t.squeeze())
+                
+                if monotone:
+                    omega_t = copy.deepcopy(phi_t)
+                # non-monotone
+                else:
+                    omega_t = copy.deepcopy(theta_t)
+                    # if timestep <= 1e6:
+                    # self.logger(f'{timestep}: non-monotone, V_phi_t = {V_phi_t.squeeze()}, V_t = {V_t.squeeze()}', title=False)
+                    self.logger(f'{timestep}: non-monotone, V_phi_rho_t = {V_phi_rho_t}, V_rho_t = {V_rho_t}', title=False)
+
+                # if timestep % 1e6 == 0:
+                    # self.logger(f'{timestep}: V_phi_t = {V_phi_t.squeeze()}, V_t = {V_t.squeeze()}', title=False)
+                    # self.logger(f'{timestep}: V_phi_rho_t = {V_phi_rho_t}, V_rho_t = {V_rho_t}', title=False)
+
+                # store theta_{t-1} for Nesterov's accelerating
+                theta_t_1 = copy.deepcopy(theta_t)
 
                 # set pbar
                 pbar.set_postfix_str(f"V_t: {[round(v[0],3) for v in V_t]}")

@@ -2,12 +2,13 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-06-14 22:43:04
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-06-28 13:03:51
+LastEditTime: 2023-10-26 11:43:47
 FilePath: /mru/APG/train/Bellman.py
 Description: 
 
 '''
 import copy   
+import random
 import numpy as np
 from numpy.linalg import inv              # for matrix inverse
 
@@ -123,9 +124,42 @@ class Bellman:
         
     # -------------- compute stochastic grad --------------
     def compute_stochastic_grad(self, pi_t, Adv_t, d_mu_t):
+        
+        # print('='*100)
+        # print('pi', pi_t)
+        # print('='*100)
+        # print('Adv', Adv_t)
+        # print('='*100)
+        # print('d_mu_t', d_mu_t)
+        # print('='*100)
 
-        pass
+        # initialize
+        delta_theta_t = np.zeros_like(pi_t, dtype=np.float64)
 
+        # sample updated state (stochastic)
+        s_t = 0 if self.state_num == 1 else random.choices(range(0, self.state_num), k=1, weights=np.squeeze(d_mu_t).tolist())[0]
+        
+        # sample updated action (stochastic)
+        a_t = random.choices(range(0,len(pi_t[s_t])), k=1, weights=pi_t[s_t])[0]
+        
+        # print('s_t', s_t)
+        # print('='*100)
+        # print('a_t', a_t)
+        # print('='*100)
+        
+
+        # stochastic PG update (batch size = 1)
+        delta_theta_t[s_t] = [-pi * Adv_t[s_t, a_t] for pi in pi_t[s_t]]
+        delta_theta_t[s_t, a_t] += Adv_t[s_t, a_t]
+        delta_theta_t *= (1.0 / (1.0-self.gamma))
+
+        # print('delta_theta_t', delta_theta_t)
+        # print('='*100)
+        # import os
+        # os._exit(1)
+
+        return delta_theta_t, (s_t+1, a_t+1)
+        
 
     # -------------- compute true grad --------------
     def compute_true_grad(self, pi_t, Adv_t, d_mu_t):

@@ -48,6 +48,7 @@ class PG_adam_model(Bellman, Saver):
             theta_t = copy.deepcopy(self.theta_0)
             delta_theta_t = np.zeros_like(theta_t)
             epoch_record = np.zeros(shape=(self.chunk_size, len(self.record_columns)), dtype=np.float64)
+            selection = [1, 1]      # [selected state, selected action]
 
             # init exponential decay rate
             beta_1 = 0.9
@@ -57,8 +58,10 @@ class PG_adam_model(Bellman, Saver):
             epsilon = 1e-8
 
             # moment vector
-            m_t = 0
-            v_t = 0
+            m_t = np.zeros_like(delta_theta_t)
+            v_t = np.zeros_like(delta_theta_t)
+            m_t_hat = np.zeros_like(delta_theta_t)
+            v_t_hat = np.zeros_like(delta_theta_t)
 
             # step size
             alpha = 1e-3
@@ -79,11 +82,13 @@ class PG_adam_model(Bellman, Saver):
                 d_t, d_rho_t = self.compute_d(pi_t)
 
                 # record
-                epoch_record[timestep % self.chunk_size, :] = np.concatenate((pi_t, theta_t, delta_theta_t, V_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((pi_t, theta_t, delta_theta_t, V_t, Q_t, Adv_t, d_t, d_rho_t, m_t, v_t, m_t_hat, v_t_hat), axis=None)
+                record = np.concatenate((record, selection)) if self.seed_num > 1 else record
+                epoch_record[timestep % self.chunk_size, :] = record
 
                 # policy gradient
                 if self.stochastic:
-                    delta_theta_t = self.compute_stochastic_grad(pi_t, Adv_t, d_rho_t)
+                    delta_theta_t, selection = self.compute_stochastic_grad(pi_t, Adv_t, d_rho_t)
                 else:
                     delta_theta_t = self.compute_true_grad(pi_t, Adv_t, d_rho_t)
 
@@ -92,7 +97,7 @@ class PG_adam_model(Bellman, Saver):
                 v_t = beta_2 * v_t + (1 - beta_2) * (delta_theta_t ** 2)
                 m_t_hat = m_t / (1 - (beta_1 ** (timestep + 1)))
                 v_t_hat = v_t / (1 - (beta_2 ** (timestep + 1)))
-                theta_t += alpha * m_t_hat / (v_t_hat + epsilon)
+                theta_t += alpha * m_t_hat / (np.sqrt(v_t_hat) + epsilon)
                 # theta_t += self.eta * delta_theta_t
 
                 # set pbar
@@ -100,7 +105,9 @@ class PG_adam_model(Bellman, Saver):
 
                 # save training process
                 if ((timestep+1) % self.chunk_size == 0) or timestep == (epoch-1):
-                    
+                    import pandas as pd
+                    print(123)
+                    print(pd.DataFrame(epoch_record, columns = self.record_columns, dtype='float64'))
                     # save to parquet
                     self.save(epoch_record)
 

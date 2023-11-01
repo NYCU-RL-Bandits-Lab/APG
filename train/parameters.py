@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-05-11 15:32:32
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-08-08 20:16:00
+LastEditTime: 2023-10-25 14:09:52
 FilePath: /mru/APG/train/parameters.py
 Description: 
 
@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument('--eta', default=0.4, type=float, help='learning rate')
     parser.add_argument('--gamma', default=9e-1, type=float, help='discounted')
     parser.add_argument('--run_algos', default=["APG", "PG", "PG_heavy_ball", "PG_adam"], type=str, nargs='+', help='')
-    parser.add_argument('--seed_num', default=100, type=int, help='seed number')
+    parser.add_argument('--seed_num', default=3, type=int, help='seed number')
     parser.add_argument('--stochastic', default=False, action='store_true')
     parser.add_argument('--APG_epoch_size', default=1000, type=int, help='APG epoch_size')
     parser.add_argument('--PG_adam_epoch_size', default=1000, type=int, help='PG_adam epoch_size')

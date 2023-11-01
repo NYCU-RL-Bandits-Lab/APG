@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-08-04 09:14:40
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-08-08 20:44:14
+LastEditTime: 2023-10-26 11:53:12
 FilePath: /mru/APG/train/PG_heavy_ball.py
 Description: 
 
@@ -61,6 +61,7 @@ class PG_heavy_ball_model(Bellman, Saver):
             mom_t = np.zeros_like(theta_t)
             grad_t = np.zeros_like(theta_t)
             epoch_record = np.zeros(shape=(self.chunk_size, len(self.record_columns)), dtype=np.float64)
+            selection = [1, 1]      # [selected state, selected action]
 
             # run
             for timestep in pbar:
@@ -81,7 +82,9 @@ class PG_heavy_ball_model(Bellman, Saver):
                 d_omega_t, d_rho_omega_t = self.compute_d(pi_t)
 
                 # record
-                epoch_record[timestep % self.chunk_size, :] = np.concatenate((pi_t, omega_pi_t, theta_t, omega_t, mom_t, grad_t, V_t, V_omega_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((pi_t, omega_pi_t, theta_t, omega_t, mom_t, grad_t, V_t, V_omega_t, Q_t, Adv_t, d_t, d_rho_t), axis=None)
+                record = np.concatenate((record, selection)) if self.seed_num > 1 else record
+                epoch_record[timestep % self.chunk_size, :] = record
 
                 # policy gradient
                 if self.stochastic:

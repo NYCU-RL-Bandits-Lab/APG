@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-02-11 00:09:40
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-06-28 14:22:04
+LastEditTime: 2023-08-17 11:00:18
 FilePath: /mru/APG/graph.py
 Description: 
     
@@ -35,6 +35,7 @@ parser.add_argument('--plot_Q', default=False, action='store_true')
 parser.add_argument('--plot_Pi', default=False, action='store_true')
 parser.add_argument('--plot_Theta', default=False, action='store_true')
 parser.add_argument('--plot_Adv', default=False, action='store_true')
+parser.add_argument('--plot_adam', default=False, action='store_true')
 args = parser.parse_args()
 
 # load the arg from .yaml
@@ -105,5 +106,11 @@ if args.plot_Adv:
     for size in args.graphing_size:
 
         plotter.plot_Adv(args.algo)
+
+if args.plot_adam:
+    
+    for size in args.graphing_size:
+
+        plotter.plot_adam(args.algo)
 
 logger(f"Finish Plotting", title=True)

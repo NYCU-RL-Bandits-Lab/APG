@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-06-15 13:39:44
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-08-08 20:15:10
+LastEditTime: 2023-10-26 11:09:21
 FilePath: /mru/APG/train/Saver.py
 Description: 
 
@@ -35,7 +35,7 @@ class Saver:
             self.state_action_pair[state][self.optimal_policy[s_num]] = "a*"
         
         # recording columns for .parquet 
-        if self.algo in ["PG", "PG_adam"]:
+        if self.algo in ["PG"]:
             self.record_columns = [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_delta_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
@@ -58,7 +58,23 @@ class Saver:
                                 + [f"Adv({state},{action})" for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f"d_{state1}({state2})" for state1 in self.state_action_pair.keys() for state2 in self.state_action_pair.keys()] \
                                 + [f"d_rho({state})" for state in self.state_action_pair.keys()]
+        
+        elif self.algo in ["PG_adam"]:
+            self.record_columns = [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f'{state}_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f'{state}_delta_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f"V({state})" for state in self.state_action_pair.keys()] \
+                                + [f"Q({state},{action})" for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f"Adv({state},{action})" for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f"d_{state1}({state2})" for state1 in self.state_action_pair.keys() for state2 in self.state_action_pair.keys()] \
+                                + [f"d_rho({state})" for state in self.state_action_pair.keys()] \
+                                + [f'm_t({state},{action})' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f'v_t({state},{action})' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f'm_t_hat({state},{action})' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
+                                + [f'v_t_hat({state},{action})' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]]
 
+        if args.seed_num > 1:
+            self.record_columns += ['stochastic_selesction_state', 'stochastic_selesction_action']
         
     # -------------- save --------------
     def save(self, epoch_record: np.ndarray):
@@ -83,11 +99,11 @@ class Saver:
 
             # set seed
             self.logger(f"Set seed: {seed}", title=True)
-            np.random.seed(seed_num)
+            np.random.seed(seed)
 
             # set save path
             self.logger(f"Set saving path: {os.path.join(self.logger.log_dir, self.algo, f'seed_{seed}.parquet')}", title=True)
-            self.save_path = os.path.join(self.log_dir, self.algo, f'seed_{seed}.parquet')
+            self.save_path = os.path.join(self.logger.log_dir, self.algo, f'seed_{seed}.parquet')
         
         else:
 
