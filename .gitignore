@@ -165,6 +165,8 @@ myenv/*
 # log file
 **/mean.parquet
 **/mean.parquet.gz
+**/**.parquet
+**/**.parquet.gz
 
 # testing .py
 test.py
@@ -172,3 +174,8 @@ test.py
 **/APG_mg.png
 **/APG_pi.png
 **/APG_theta.png
+
+# adam
+**/PG_adam.py
+
+**/past/*
