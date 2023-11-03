@@ -2,7 +2,7 @@
  * @Author: Yen-Ju Chen  mru.11@nycu.edu.tw
  * @Date: 2023-06-15 13:36:36
  * @LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
- * @LastEditTime: 2023-11-01 11:48:03
+ * @LastEditTime: 2023-11-03 10:34:45
  * @FilePath: /mru/APG/README.md
  * @Description: 
  * 
@@ -12,7 +12,7 @@
 
 Yen-Ju Chen, Nai-Chieh Huang, [Ping-Chun Hsieh](https://pinghsieh.github.io/)
 
-*ICML 2023 Workshop on New Frontiers in Learning, Control, and Dynamical Systems*
+This repository is an extended version of *ICML 2023 Workshop on New Frontiers in Learning, Control, and Dynamical Systems*
 [\[Paper\]](./assests/APG-ICML-workshop-paper.pdf.pdf), [\[Poster\]](./assests/APG-ICML-workshop-poster.pdf)
 
 
