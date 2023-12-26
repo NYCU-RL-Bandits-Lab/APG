@@ -117,6 +117,9 @@ def check_env(args, logger):
     if args.APG_graphing_size == [None]:
         args.APG_graphing_size = [args.APG_epoch_size]
         logger(f"Setting APG_graphing_size = APG_epoch_size = {args.APG_epoch_size}", title=True)
+    if args.APG_adaptive_graphing_size == [None]:
+        args.APG_adaptive_graphing_size = [args.APG_adaptive_epoch_size]
+        logger(f"Setting APG_adaptive_graphing_size = APG_adaptive_epoch_size = {args.APG_adaptive_epoch_size}", title=True)
     if args.PG_graphing_size == [None]:
         args.PG_graphing_size = [args.PG_epoch_size]
         logger(f"Setting PG_graphing_size = PG_epoch_size = {args.PG_epoch_size}", title=True)
@@ -168,7 +171,6 @@ def check_env(args, logger):
 
 # -------------- data preprocessing --------------
 def date_preprocessing(seed_num: int, log_dir: str, logger: object):
-    pass
 
     logger(f"Data Preprocessing...", title=True)
 

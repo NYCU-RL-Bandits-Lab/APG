@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-05-11 15:32:32
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-10-25 14:09:52
+LastEditTime: 2023-11-29 12:30:07
 FilePath: /mru/APG/train/parameters.py
 Description: 
 
@@ -23,6 +23,7 @@ def parse_args():
     parser.add_argument('--seed_num', default=3, type=int, help='seed number')
     parser.add_argument('--stochastic', default=False, action='store_true')
     parser.add_argument('--APG_epoch_size', default=1000, type=int, help='APG epoch_size')
+    parser.add_argument('--APG_adaptive_epoch_size', default=1000, type=int, help='APG epoch_size')
     parser.add_argument('--PG_adam_epoch_size', default=1000, type=int, help='PG_adam epoch_size')
     parser.add_argument('--PG_heavy_ball_epoch_size', default=1000, type=int, help='PG_heavy_ball epoch_size')
     parser.add_argument('--PG_epoch_size', default=1000, type=int, help='PG epoch_size')
@@ -34,6 +35,7 @@ def parse_args():
 
     # graphing
     parser.add_argument('--APG_graphing_size', default=[None], type=int, nargs='+', help='')
+    parser.add_argument('--APG_adaptive_graphing_size', default=[None], type=int, nargs='+', help='')
     parser.add_argument('--PG_adam_graphing_size', default=[None], type=int, nargs='+', help='')
     parser.add_argument('--PG_heavy_ball_graphing_size', default=[None], type=int, nargs='+', help='')
     parser.add_argument('--PG_graphing_size', default=[None], type=int, nargs='+', help='')

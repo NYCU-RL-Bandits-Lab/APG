@@ -24,6 +24,7 @@ class Plotter:
         # epoch size
         self.PG_epoch_size = args.PG_epoch_size
         self.APG_epoch_size = args.APG_epoch_size
+        self.APG_adaptive_epoch_size = args.APG_adaptive_epoch_size
         self.PG_adam_epoch_size = args.PG_adam_epoch_size
         self.PG_heavy_ball_epoch_size = args.PG_heavy_ball_epoch_size
 
@@ -89,6 +90,7 @@ class Plotter:
         # algo color
         self.color_dict = {
             'APG': 'blue',
+            'APG_adaptive': 'c',
             'PG': 'red',
             'PG_heavy_ball': 'darkorange',
             'PG_adam': 'mediumpurple',
@@ -97,6 +99,7 @@ class Plotter:
         # algo name
         self.name_dict = {
             'APG': 'APG (Ours)',
+            'APG_adaptive': 'APG + Adaptive Lr',
             'PG': 'PG',
             'PG_heavy_ball': 'HBPG',
             'PG_adam': 'PG + Adam',
@@ -286,7 +289,7 @@ class Plotter:
         axis = plt.subplot(1, 1, 1)
         
         # Plot on same graph
-        for algo in ["PG", "PG_heavy_ball", "APG"]:
+        for algo in ["PG", "PG_heavy_ball", "APG", "APG_adaptive"]:
         # for algo in ["PG", "APG", "PG_adam", "PG_heavy_ball"]:
 
             try:
@@ -606,6 +609,8 @@ class Plotter:
             epoch_size = self.PG_heavy_ball_epoch_size
         elif self.algo == "PG_adam":
             epoch_size = self.PG_adam_epoch_size
+        elif self.algo == "APG_adaptive":
+            epoch_size = self.APG_adaptive_epoch_size
 
         # log
         self.logger(f"Computing V(ρ)", title=False)
@@ -622,7 +627,7 @@ class Plotter:
             if self.algo in ["PG", "PG_adam"]:
                 df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
                                     columns=[f'V({state})'])
-            elif self.algo in ["APG", "PG_heavy_ball"]:
+            elif self.algo in ["APG", "PG_heavy_ball", "APG_adaptive"]:
                 df = pd.read_parquet(os.path.join(self.logger.log_dir, self.algo, 'mean.parquet'), \
                                     columns=[f'V({state})', f'V_omega({state})'])
                 # accumulate V(ρ)
@@ -1075,3 +1080,50 @@ class Plotter:
     #     plt.cla()
     #     plt.clf()
     #     plt.close("all")
+    def plot_Value_tmp(self, size: int):
+
+        fig = plt.figure(figsize=(5, 4))
+
+        # specify algo
+        # self.algo = algo
+
+        # configuration
+        self.legendsize = 14
+        self.fontsize = 18
+        self.offtextsize = 14
+        self.ticksize = 16
+        self.linewidth = 3.0
+
+        axis = plt.subplot(1, 1, 1)
+        for algo in ['PG', 'APG']:
+            self.algo = algo
+            # compute V(ρ)
+            self.df_v_rho = self.compute_V_rho()
+
+            # Value function (V)
+            self.plot_V_tmp(axis, size)
+
+        # configuration 
+        self.configure(axis, red_text=False)
+        plt.xticks([i * (size//5) for i in range(6)])
+
+        # save plot
+        plt.tight_layout()  
+        plt.savefig(os.path.join(self.logger.log_dir, f'value_{size}.png'))
+        plt.cla()
+        plt.clf()
+        plt.close("all")
+    
+    def plot_V_tmp(self, axis, size):
+        
+        # plot V(ρ)
+        self.logger(f"Plotting V(ρ)", title=False)
+        axis.plot(self.df_v_rho.iloc[:size]["V_theta(rho)"].to_numpy(), \
+                    label=self.name_dict[self.algo],\
+                    # label=f"V(ρ) = {round(self.df_v_rho.iloc[size-1]['V_theta(rho)'], 2)}",\
+                    color = self.color_dict[self.algo], \
+                    linewidth=self.linewidth)
+
+        axis.set_title("Value Function", fontsize=self.fontsize, fontdict=dict(weight='bold'), fontname='monospace', pad=12)
+        axis.set_xlabel("Time Steps", fontsize=self.fontsize, fontname='monospace', labelpad=7)
+        axis.set_ylabel("V(ρ)", fontsize=self.fontsize, fontname='monospace', labelpad=7)

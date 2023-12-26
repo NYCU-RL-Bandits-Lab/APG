@@ -1,0 +1,53 @@
+APG_adaptive_epoch_size: 1000
+APG_adaptive_graphing_size:
+- 1000
+APG_epoch_size: 1000
+APG_graphing_size:
+- 1000
+PG_adam_epoch_size: 1000
+PG_adam_graphing_size:
+- 1000
+PG_epoch_size: 1000
+PG_graphing_size:
+- 1000
+PG_heavy_ball_epoch_size: 1000
+PG_heavy_ball_graphing_size:
+- 1000
+V_opt: 1.0
+V_opts: 1.0
+action_num: 3
+chunk_size: 100000
+d_rho_opt: 1.0
+env: ./mdp_env/bandit_uniform.yaml
+eta: 0.4
+fname: bandit_uniform
+gamma: 0.0
+initial_state_distribution_dict:
+  s1: 1
+initial_theta_dict:
+  s1:
+  - 0.0
+  - 0.0
+  - 0.0
+log_root: ./logs/adaptive-apg
+max_iter: 100000000
+optimal_policy:
+- 0
+random_mdp: false
+reward_dict:
+  s1_a1: 1.0
+  s1_a2: 0.99
+  s1_a3: 0.0
+run_algos:
+- APG_adaptive
+- APG
+seed_num: 1
+state_action_num:
+- null
+- null
+state_num: 1
+stochastic: false
+transition_prob_dict:
+  s1a1_s1: 1
+  s1a2_s1: 1
+  s1a3_s1: 1

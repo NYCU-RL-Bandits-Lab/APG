@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-06-15 13:39:44
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-10-26 11:09:21
+LastEditTime: 2023-11-29 12:49:23
 FilePath: /mru/APG/train/Saver.py
 Description: 
 
@@ -45,7 +45,7 @@ class Saver:
                                 + [f"d_{state1}({state2})" for state1 in self.state_action_pair.keys() for state2 in self.state_action_pair.keys()] \
                                 + [f"d_rho({state})" for state in self.state_action_pair.keys()]
 
-        elif self.algo in ["APG", "PG_heavy_ball"]:
+        elif self.algo in ["APG", "PG_heavy_ball", "APG_adaptive"]:
             self.record_columns = [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 +[f'{state}_omega_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \
                                 + [f'{state}_theta_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \

@@ -2,7 +2,7 @@
 Author: Yen-Ju Chen  mru.11@nycu.edu.tw
 Date: 2023-01-30 16:33:40
 LastEditors: Yen-Ju Chen  mru.11@nycu.edu.tw
-LastEditTime: 2023-10-26 10:33:37
+LastEditTime: 2023-11-29 12:33:29
 FilePath: /mru/APG/main.py
 Description: 
     Test convergence of APG & PG Actor-Critic under softmax parameterization
@@ -27,6 +27,7 @@ from plot import Plotter
 from PI import PI_model
 from PG import PG_model
 from APG import APG_model
+from APG_adaptive import APG_adaptive_model
 from PG_adam import PG_adam_model
 from PG_heavy_ball import PG_heavy_ball_model
 from parameters import parse_args
@@ -72,11 +73,13 @@ def main():
     APG = APG_model(args, logger)
     PG_adam = PG_adam_model(args, logger)
     PG_heavy_ball = PG_heavy_ball_model(args, logger)
+    APG_adaptive = APG_adaptive_model(args, logger)
     models = {
         'PG': (PG, args.PG_epoch_size),
         'APG': (APG, args.APG_epoch_size),
         'PG_adam': (PG_adam, args.PG_adam_epoch_size),
         'PG_heavy_ball': (PG_heavy_ball, args.PG_heavy_ball_epoch_size),
+        'APG_adaptive': (APG_adaptive, args.APG_adaptive_epoch_size),
     }
 
     # multiprocessing
@@ -104,6 +107,8 @@ def main():
             graphing_size = args.PG_adam_graphing_size
         elif algo == "PG_heavy_ball":
             graphing_size = args.PG_heavy_ball_graphing_size
+        elif algo == "APG_adaptive":
+            graphing_size = args.APG_adaptive_graphing_size
 
         
         # plot under different size
