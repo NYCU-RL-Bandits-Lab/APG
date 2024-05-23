@@ -241,4 +241,3 @@ data/
 _build/
 
 /spinningup/** 
-/rl-baselines3-zoo/** 
