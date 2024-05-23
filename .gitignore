@@ -227,6 +227,7 @@ keys/
 # logs
 **/logs-atari_
 **/logs-atari
+**/docs
 
 # spinningup
 *.*~
@@ -239,5 +240,3 @@ data/
 .vscode/
 .DS_Store
 _build/
-
-/spinningup/** 
