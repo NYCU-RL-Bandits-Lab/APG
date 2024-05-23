@@ -1,0 +1,40 @@
+V_opt: 1.0
+V_opts: 1.0
+action_num: 3
+algo: NAPG
+chunk_size: 1
+d_rho_opt: 1.0
+env: ./mdp_env/bandit_non_monotone.yaml
+epoch: 500
+eta: 0.4
+fname: bandit_non_monotone_napg
+gamma: 0.0
+graphing_size:
+- 500
+initial_state_distribution_dict:
+  s1: 1
+initial_theta_dict:
+  s1:
+  - 0
+  - 3
+  - 10
+log_dir: ./logs/bandit_non_monotone_napg
+log_root: ./logs
+max_iter: 100000000
+optimal_policy:
+- 0
+random_mdp: false
+reward_dict:
+  s1_a1: 1.0
+  s1_a2: 0.8
+  s1_a3: 0.0
+seed_num: 1
+state_action_num:
+- null
+- null
+state_num: 1
+stochastic: false
+transition_prob_dict:
+  s1a1_s1: 1
+  s1a2_s1: 1
+  s1a3_s1: 1

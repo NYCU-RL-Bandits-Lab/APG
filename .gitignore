@@ -163,6 +163,7 @@ cython_debug/
 myenv/*
 
 # log file
+**/run.log
 **/mean.parquet
 **/mean.parquet.gz
 **/**.parquet
@@ -179,3 +180,65 @@ test.py
 **/PG_adam.py
 
 **/past/*
+**/run.log
+**/main_assumption_4.py
+**/graph.py
+**/sigmoid.ipynb
+**/scripts_/**
+**/logs_/**
+**/mdp_env_/**
+
+
+# rl baselines3 zoo
+__pycache__/
+.pytest_cache/
+.coverage
+.coverage.*
+.idea/
+cluster_sbatch.sh
+cluster_sbatch_mpi.sh
+cluster_torchy.sh
+logs_/
+scripts_/
+rl-trained_agents/
+.pytype/
+htmlcov/
+git_rewrite_commit_history.sh
+.vscode/
+wandb
+runs
+hub
+*.mp4
+*.json
+_build/
+
+tests/dummy_env/build/
+
+
+# Setuptools distribution and build folders.
+/dist/
+/build
+keys/
+*.egg-info
+.cache
+*.lprof
+*.prof
+
+# logs
+**/logs-atari_
+**/logs-atari
+
+# spinningup
+*.*~
+__pycache__/
+*.pkl
+data/
+**/*.egg-info
+.python-version
+.idea/
+.vscode/
+.DS_Store
+_build/
+
+/spinningup/** 
+/rl-baselines3-zoo/** 
