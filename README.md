@@ -5,7 +5,7 @@ Yen-Ju Chen, Nai-Chieh Huang, [Ching-Pei Lee](https://leepei.github.io), [Ping-C
 
 *41th International Conference on Machine Learning (ICML 2024)*
 
-[\[Paper\]](./assests/APG-ICML-workshop-paper.pdf.pdf), [\[Poster\]](./assests/APG-ICML-workshop-poster.pdf)
+[\[Poster\]](./assests/APG-ICML-workshop-poster.pdf)
 
 
 <br/><br/>
