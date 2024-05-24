@@ -226,7 +226,7 @@ class Plotter:
         fig = plt.figure(figsize=(5, 4))
 
         # specify algo
-        img_path = os.path.join(self.log_dir, f'{self.algo}', f'{self.algo}_value_{size}.png')
+        img_path = os.path.join(self.log_dir, f'value_{size}.png')
         logger.info(f"[{self.algo}] Plotting value function at: {img_path}")
 
         # configuration

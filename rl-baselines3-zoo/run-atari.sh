@@ -18,41 +18,24 @@ declare -a env_list=(
 # echo ${env_list[*]}
 for env in ${env_list[*]}
 do
-    # # pg
-    # for seed in {0..1}
-    # do
-    #     ./run-pg-atari.sh $env $seed &
-    #     sleep 5
-    # done
-    # wait
-    # for seed in {2..3}
-    # do
-    #     ./run-pg-atari.sh $env $seed &
-    #     sleep 5
-    # done
-    # wait
-    # ./run-pg-atari.sh $env 4
-    # for seed in {0..4}
-    # do
-    #     # apg
-    #     ./run-apg-atari.sh $env $seed 0.4 &
-    #     sleep 5
-    #     ./run-apg-atari.sh $env $seed 0.5
-    #     wait
-    #     ./run-apg-atari.sh $env $seed 0.6 &
-    #     sleep 5
-    #     ./run-apg-atari.sh $env $seed 0.7 
-    #     wait
-    #     # hb
-    #     ./run-hb-atari.sh $env $seed 0.4 &
-    #     sleep 5
-    #     ./run-hb-atari.sh $env $seed 0.5 
-    #     wait
-    #     ./run-hb-atari.sh $env $seed 0.6 &
-    #     sleep 5
-    #     ./run-hb-atari.sh $env $seed 0.7
-    #     wait
-    # done
+    # pg
+    for seed in {0..4}
+    do
+        ./run-pg-atari.sh $env $seed
+    done
+    for seed in {0..4}
+    do
+        # apg
+        ./run-apg-atari.sh $env $seed 0.4
+        ./run-apg-atari.sh $env $seed 0.5
+        ./run-apg-atari.sh $env $seed 0.6
+        ./run-apg-atari.sh $env $seed 0.7 
+        # hb
+        ./run-hb-atari.sh $env $seed 0.4
+        ./run-hb-atari.sh $env $seed 0.5 
+        ./run-hb-atari.sh $env $seed 0.6
+        ./run-hb-atari.sh $env $seed 0.7
+    done
     # npg
     for seed in {0..4}
     do
