@@ -30,10 +30,6 @@ class APG_adaptive_model(Bellman, Saver):
         # V(optimum)
         self.V_opt = args.V_opt  
 
-        # TODO
-        self.mode = 'Xiao'
-        assert self.mode in ['mom_factor', 'Mei', 'Xiao']
-        
     
     # -------------- training loop --------------
     def learn(self, epoch: int):
@@ -104,20 +100,12 @@ class APG_adaptive_model(Bellman, Saver):
                 else:
                     grad_t = self.compute_true_grad(omega_pi_t, Adv_omega_t, d_rho_omega_t)
                 
-                if self.mode == 'Mei':
-                    grad_t = grad_t / (np.linalg.norm(grad_t) + 1e-100)
-                
-                if self.mode == 'Xiao':
-                    scalar = 5.
-                    theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t * np.power(scalar, timestep+1)
+                theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t * min(np.power(5., timestep+1), 1. / (np.linalg.norm(grad_t) + 1e-100))
                 
                 # momentum update
                 mom_t = copy.deepcopy(theta_t - theta_t_1)
                 mom_t[~np.isfinite(mom_t)] = 0.
-                if self.mode == 'mom_factor':
-                    phi_t = copy.deepcopy(theta_t) + 1.0 * mom_t
-                else:
-                    phi_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
+                phi_t = copy.deepcopy(theta_t) + (float(timestep) / (timestep + 3)) * mom_t
                 phi_pi_t = self.compute_pi(phi_t)
                 V_phi_t, _, _, V_phi_rho_t = self.compute_V_Q_Adv(phi_pi_t)
 

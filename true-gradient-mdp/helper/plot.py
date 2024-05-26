@@ -140,7 +140,7 @@ class Plotter:
         self.name_dict = {
             'APG': 'APG (Ours)',
             'NAPG': 'NAPG (Ours)',
-            'APG_adaptive': 'APG + exp-growing lr',
+            'APG_adaptive': 'APG + Adaptive lr',
             'PG': 'PG',
             'PG_heavy_ball': 'HBPG',
             'PG_adam': 'PG + Adam',
@@ -405,9 +405,9 @@ class Plotter:
         # configuration 
         configure(
             axis,
-            sci=False,
+            sci=True,
             loc='upper left',
-            red_text=True,
+            red_text=False,
         )
         # plt.xticks([0, 5, 10, 15, 20])
         # plt.yticks([0, 10, 20, 30, 40])
