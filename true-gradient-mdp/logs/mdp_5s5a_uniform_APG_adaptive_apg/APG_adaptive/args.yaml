@@ -15,12 +15,12 @@ d_rho_opt:
 - 0.12874247241137055
 - 0.2053740763925526
 env: ./mdp_env/mdp_5s5a_uniform.yaml
-epoch: 3000
+epoch: 25
 eta: 0.00012499999999999992
 fname: mdp_5s5a_uniform_APG_adaptive_apg
 gamma: 0.9
 graphing_size:
-- 3000
+- 25
 initial_state_distribution_dict:
   s1: 0.3
   s2: 0.2

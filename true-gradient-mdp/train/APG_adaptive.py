@@ -100,7 +100,8 @@ class APG_adaptive_model(Bellman, Saver):
                 else:
                     grad_t = self.compute_true_grad(omega_pi_t, Adv_omega_t, d_rho_omega_t)
                 
-                theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t * min(np.power(5., timestep+1), 1. / (np.linalg.norm(grad_t) + 1e-100))
+                # theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t * min(np.power(5., timestep+1), 1. / (np.linalg.norm(grad_t) + 1e-100))
+                theta_t =  copy.deepcopy(omega_t) + (0.5) * (float(timestep + 1) / (timestep + 2)) * self.eta * grad_t * np.power(5., timestep+1)
                 
                 # momentum update
                 mom_t = copy.deepcopy(theta_t - theta_t_1)

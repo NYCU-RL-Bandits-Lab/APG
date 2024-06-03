@@ -27,7 +27,7 @@ do
                     --fname "$env"_APG_adaptive_apg \
                     --gamma 0.9 \
                     --chunk_size 1 \
-                    --epoch 3000 \
+                    --epoch 25 \
                     --env ./mdp_env/$env.yaml \
                     --algo $algo
 done
