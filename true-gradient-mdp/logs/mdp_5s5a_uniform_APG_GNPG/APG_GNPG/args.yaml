@@ -6,7 +6,7 @@ V_opts:
 - 9.190898144174335
 - 9.392403798579085
 action_num: 5
-algo: APG_adaptive
+algo: APG_GNPG
 chunk_size: 1
 d_rho_opt:
 - 0.26380524901522867
@@ -15,12 +15,12 @@ d_rho_opt:
 - 0.12874247241137055
 - 0.2053740763925526
 env: ./mdp_env/mdp_5s5a_uniform.yaml
-epoch: 25000
+epoch: 1000
 eta: 0.00012499999999999992
-fname: mdp_5s5a_uniform_APG_adaptive_apg
+fname: mdp_5s5a_uniform_APG_GNPG
 gamma: 0.9
 graphing_size:
-- 25000
+- 1000
 initial_state_distribution_dict:
   s1: 0.3
   s2: 0.2
@@ -58,7 +58,7 @@ initial_theta_dict:
   - 0.0
   - 0.0
   - 0.0
-log_dir: ./logs/mdp_5s5a_uniform_APG_adaptive_apg
+log_dir: ./logs/mdp_5s5a_uniform_APG_GNPG
 log_root: ./logs
 max_iter: 100000000
 optimal_policy:

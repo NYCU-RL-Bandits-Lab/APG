@@ -40,7 +40,7 @@ class Saver:
                 + [f"d_{state1}({state2})" for state1 in self.state_action_pair.keys() for state2 in self.state_action_pair.keys()] \
                 + [f"d_rho({state})" for state in self.state_action_pair.keys()]
 
-        elif self.algo in ["APG", "NAPG", "PG_heavy_ball", "APG_adaptive"]:
+        elif self.algo in ["APG", "NAPG", "PG_heavy_ball", "APG_adaptive", "APG_GNPG"]:
             self.record_columns = \
                 ['timestep', 'log(timestep)'] \
                 + [f'{state}_pi_{action}' for state in self.state_action_pair.keys() for action in self.state_action_pair[state]] \

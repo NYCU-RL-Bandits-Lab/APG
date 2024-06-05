@@ -10,13 +10,13 @@ from Saver import Saver
 
 
 # -------------- Accelerated Policy Gradient --------------
-class APG_adaptive_model(Bellman, Saver):
+class APG_GNPG_model(Bellman, Saver):
 
     def __init__(self, args: object):
 
         # initialize class Bellman & Save
         Bellman.__init__(self, args)
-        Saver.__init__(self, args, "APG_adaptive")
+        Saver.__init__(self, args, "APG_GNPG")
 
         # how many seed num to run
         self.seed_num = args.seed_num
@@ -25,21 +25,20 @@ class APG_adaptive_model(Bellman, Saver):
         self.chunk_size = args.chunk_size
 
         # save path for .parquet
-        self.save_path = os.path.join(args.log_dir, 'APG_adaptive', f'mean.parquet') 
+        self.save_path = os.path.join(args.log_dir, 'APG_GNPG', f'mean.parquet') 
 
         # V(optimum)
         self.V_opt = args.V_opt  
 
-        # beta
-        self.beta = np.exp((1.0 - self.gamma) / (4 * np.sqrt(self.action_num) * self.state_num * (4 - (1.0 - self.gamma))))
-        self.k = (1.0 - self.gamma) / (2 * np.sqrt(self.action_num) * self.state_num * (4 - (1.0 - self.gamma))) + 2 * np.log(self.beta)
+        # specify eta
+        self.eta_ = (1.0-self.gamma) / (np.sqrt(self.state_num) * (8.0 * max(1.0 / self.initial_state_distribution) - 2.0 * (1.0 - self.gamma)))
 
     
     # -------------- training loop --------------
     def learn(self, epoch: int):
 
         # log
-        logger.info(f"{'[APG_adaptive]':16s} Start Running")
+        logger.info(f"{'[APG_GNPG]':16s} Start Running")
                     
         for seed in range(self.seed_num):
 
@@ -59,7 +58,7 @@ class APG_adaptive_model(Bellman, Saver):
 
                 # log info
                 if ((timestep+1) % self.chunk_size == 0) or (timestep == 0):
-                    logger.debug(f"[APG_adaptive] Epoch {timestep:^10d}/{epoch:^10d}")
+                    logger.debug(f"[APG_GNPG] Epoch {timestep:^10d}/{epoch:^10d}")
 
                 # compute policy (pi)
                 pi_t = self.compute_pi(theta_t)
@@ -104,7 +103,7 @@ class APG_adaptive_model(Bellman, Saver):
                 else:
                     grad_t = self.compute_true_grad(omega_pi_t, Adv_omega_t, d_rho_omega_t)
                 
-                theta_t =  copy.deepcopy(omega_t) + np.clip(self.eta * grad_t * np.power(self.beta, timestep+1), -self.k, self.k)
+                theta_t =  copy.deepcopy(omega_t) + self.eta_ * (grad_t / np.linalg.norm(grad_t))
                 
                 # momentum update
                 mom_t = copy.deepcopy(theta_t - theta_t_1)
@@ -119,9 +118,9 @@ class APG_adaptive_model(Bellman, Saver):
                     omega_t = copy.deepcopy(phi_t)
                 else:
                     omega_t = copy.deepcopy(theta_t)
-                    logger.debug(f"[APG_adaptive] {timestep}: non-monotone, V_phi_rho_t = {V_phi_rho_t.item()}, V_rho_t = {V_rho_t.item()}")
+                    logger.debug(f"[APG_GNPG] {timestep}: non-monotone, V_phi_rho_t = {V_phi_rho_t.item()}, V_rho_t = {V_rho_t.item()}")
 
                 # store theta_{t-1} for Nesterov's accelerating
                 theta_t_1 = copy.deepcopy(theta_t)
 
-        logger.info(f"[APG_adaptive] Finish Running")
+        logger.info(f"[APG_GNPG] Finish Running")

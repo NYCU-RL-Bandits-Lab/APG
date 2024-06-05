@@ -65,6 +65,7 @@ def main():
         'PG_adam': PG_adam_model(args),
         'PG_heavy_ball': PG_heavy_ball_model(args),
         'APG_adaptive': APG_adaptive_model(args),
+        'APG_GNPG': APG_GNPG_model(args),
         'NPG': NPG_model(args),
     }
 

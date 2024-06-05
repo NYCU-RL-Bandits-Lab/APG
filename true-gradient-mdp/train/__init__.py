@@ -8,4 +8,5 @@ from train.PG_heavy_ball import *
 from train.NAPG import *
 from train.APG import *
 from train.APG_adaptive import *
+from train.APG_GNPG import *
 from train.NPG import *

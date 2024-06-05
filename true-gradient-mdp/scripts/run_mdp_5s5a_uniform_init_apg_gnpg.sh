@@ -21,13 +21,13 @@ source /home/m-ru/anaconda3/bin/activate APG
 env="mdp_5s5a_uniform"
 now="$(date +'%Y%m%d-%H:%M:%S')"
 # run
-for algo in "APG_adaptive"
+for algo in "APG_GNPG"
 do
     python3 main.py --log_root ./logs \
-                    --fname "$env"_APG_adaptive_apg \
+                    --fname "$env"_APG_GNPG \
                     --gamma 0.9 \
                     --chunk_size 1 \
-                    --epoch 25000 \
+                    --epoch 1000 \
                     --env ./mdp_env/$env.yaml \
                     --algo $algo
 done
