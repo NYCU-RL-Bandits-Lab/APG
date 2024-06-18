@@ -5,7 +5,7 @@ Yen-Ju Chen, Nai-Chieh Huang, [Ching-Pei Lee](https://leepei.github.io), [Ping-C
 
 *41th International Conference on Machine Learning (ICML 2024)*
 
-[\[Poster\]](./assests/APG-ICML-workshop-poster.pdf)
+[\[Poster\]](https://www.overleaf.com/read/yhjbqhtmfnjt#d5bdd8)
 
 
 <br/><br/>
@@ -34,10 +34,10 @@ Yen-Ju Chen, Nai-Chieh Huang, [Ching-Pei Lee](https://leepei.github.io), [Ping-C
 If you find our repository helpful to your research, please cite our paper:
 
 ```
-@article{chen2023accelerated,
-  title={Accelerated Policy Gradient: On the Nesterov Momentum for Reinforcement Learning},
-  author={Chen, Yen-Ju and Huang, Nai-Chieh and Hsieh, Ping-Chun},
+@article{chen2024accelerated,
+  title={Accelerated Policy Gradient: On the Convergence Rates of the Nesterov Momentum for Reinforcement Learning},
+  author={Chen, Yen-Ju and Huang, Nai-Chieh and Ching-Pei Lee and Hsieh, Ping-Chun},
   journal={arXiv preprint arXiv:2310.11897},
-  year={2023}
+  year={2024}
 }
 ```
