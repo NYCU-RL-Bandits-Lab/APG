@@ -12,9 +12,6 @@ Yen-Ju Chen, Nai-Chieh Huang, [Ching-Pei Lee](https://leepei.github.io), [Ping-C
 ## Folder Structure
 ```
 .
-├── assests/
-│   └── APG-ICML-workshop-paper.pdf.pdf
-│   └── APG-ICML-workshop-poster.pdf
 ├── rl-baselines3-zoo/
 ├── spinningup/
 ├── true-gradient-mdp/
